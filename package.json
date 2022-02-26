@@ -1,0 +1,46 @@
+{
+  "name": "webpack-userscript-template",
+  "description": "Build your UserScript with webpack",
+  "version": "0.0.0",
+  "author": {
+    "name": "Trim21",
+    "email": "trim21me@gmail.com"
+  },
+  "scripts": {
+    "postversion": "git push --follow-tags",
+    "analize": "npm_config_report=true npm run build",
+    "build": "webpack --mode production --config config/webpack.config.production.cjs",
+    "dev": "webpack --mode development --config config/webpack.config.dev.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Trim21/webpack-userscript-template"
+  },
+  "private": true,
+  "dependencies": {
+    "axios": "0.26.0",
+    "axios-userscript-adapter": "0.1.11",
+    "jquery": "3.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.17.5",
+    "@babel/preset-env": "7.16.11",
+    "@babel/preset-typescript": "7.16.7",
+    "@types/greasemonkey": "4.0.2",
+    "@typescript-eslint/eslint-plugin": "5.12.1",
+    "@typescript-eslint/parser": "5.12.1",
+    "babel-loader": "8.2.3",
+    "browserslist": "4.19.3",
+    "css-loader": "6.6.0",
+    "less": "4.1.2",
+    "less-loader": "10.2.0",
+    "style-loader": "3.3.1",
+    "typescript": "4.5.5",
+    "userscript-metadata-webpack-plugin": "0.1.1",
+    "webpack": "5.69.1",
+    "webpack-bundle-analyzer": "4.5.0",
+    "webpack-cli": "4.9.2",
+    "webpack-livereload-plugin": "3.0.2",
+    "webpack-merge": "5.8.0"
+  }
+}
