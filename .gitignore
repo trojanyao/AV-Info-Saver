@@ -1,5 +1,6 @@
 node_modules
 .idea
 .vscode
-dist
+index.debug.user.js
+index.dev.user.js
 package-lock.json
