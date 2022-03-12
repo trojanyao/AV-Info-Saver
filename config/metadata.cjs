@@ -9,6 +9,7 @@ module.exports = {
   // 'license': 'MIT',
   match: [
     'https://www.madonna-av.com/*',
+    'https://www.naughtyamerica.com/*'
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
@@ -16,7 +17,8 @@ module.exports = {
     `https://cdn.jsdelivr.net/npm/axios-userscript-adapter@${dependencies['axios-userscript-adapter']}/dist/axiosGmxhrAdapter.min.js`,
   ],
   grant: [
-    'GM.xmlHttpRequest'
+    'GM.xmlHttpRequest',
+    'GM.download'
   ],
   connect: [
     'httpbin.org'
