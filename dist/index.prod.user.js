@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        AV-Info-Quick-Saver
 // @namespace
-// @version     0.0.0
+// @version     1.0.0
 // @author      TROJAN <ytj1996@sina.com>
 // @source
 // @match       https://www.madonna-av.com/*
