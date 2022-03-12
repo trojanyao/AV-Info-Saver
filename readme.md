@@ -1,6 +1,6 @@
 # 安装
 
-[点击安装](https://github.com/trojanyao/AV-Info-Quick-Save/blob/master/dist/index.prod.user.js)
+[点击安装](https://github.com/trojanyao/AV-Info-Quick-Save/raw/master/dist/index.prod.user.js)
 
 
 
