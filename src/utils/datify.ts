@@ -2,6 +2,8 @@
 export function datify(date: string) {
     if (/\d{4}\.\d{2}\.\d{2}/.test(date)) {
         return date
+    } else if (/\d+\/\d+\/\d+/) {
+        return date.replace(/\//g, '.')
     } else {
         let year = date.match(/(\d{4})年/)[1];
         let month = date.match(/(\d{1,2})月/)[1];
