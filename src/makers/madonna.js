@@ -1,8 +1,8 @@
 import { codify } from "../utils/codify";
 
-export function Madonna(url: string) {
+export function Madonna(url) {
     // 定义页面元素
-    let workName, seriesName, date, actress: string[], code, imgUrl
+    let workName, seriesName, date, actress = [], code, imgUrl
     // 仅在作品页生效
     if (url.includes('https://www.madonna-av.com/works/detail/')) {
         // 页面数据列表
