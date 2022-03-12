@@ -3,8 +3,8 @@
   "description": "Build your UserScript with webpack",
   "version": "0.0.0",
   "author": {
-    "name": "Trim21",
-    "email": "trim21me@gmail.com"
+    "name": "TROJAN",
+    "email": "ytj1996@sina.com"
   },
   "scripts": {
     "postversion": "git push --follow-tags",
@@ -14,13 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Trim21/webpack-userscript-template"
+    "url": ""
   },
   "private": true,
   "dependencies": {
     "axios": "0.26.0",
     "axios-userscript-adapter": "0.1.11",
-    "jquery": "3.6.0"
+    "jquery": "3.6.0",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@babel/core": "7.17.5",

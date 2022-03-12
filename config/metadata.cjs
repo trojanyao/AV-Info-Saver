@@ -1,14 +1,16 @@
 const { author, dependencies, repository, version } = require('../package.json')
 
 module.exports = {
-  name: 'webpack-userscript-template',
-  namespace: 'https://trim21.me/',
+  name: 'AV-Info-Quick-Saver',
+  namespace: '',
   version: version,
   author: author,
   source: repository.url,
   // 'license': 'MIT',
   match: [
-    'http://www.example.com/*'
+    'https://www.madonna-av.com/*',
+    'https://www.naughtyamerica.com/*',
+    'https://www.1pondo.tv/*',
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
@@ -16,7 +18,8 @@ module.exports = {
     `https://cdn.jsdelivr.net/npm/axios-userscript-adapter@${dependencies['axios-userscript-adapter']}/dist/axiosGmxhrAdapter.min.js`,
   ],
   grant: [
-    'GM.xmlHttpRequest'
+    'GM.xmlHttpRequest',
+    'GM.download'
   ],
   connect: [
     'httpbin.org'
