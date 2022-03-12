@@ -6,9 +6,14 @@ export async function final(av) {
     let finalName;
     console.log('传入的 AV 对象', av)
 
-    // 处理标题（头尾去空格）
+    // ***** 处理标题 *****
+    // 去末尾演员名
+    let endAct = new RegExp(av.actress[0] + '$', 'g')
+    if (endAct.test(av.workName)) {
+        av.workName = av.workName.replace(av.actress[0], '')
+    }
+    // 头尾去空格
     av.workName = av.workName.trim()
-    // replace(':', '-')
 
     if (av.code) {
         // 日本作品，有番号
@@ -19,13 +24,17 @@ export async function final(av) {
         av.actress = av.actress.join(' ')
 
         if (av && av.seriesName) {
-            if (av.workName.replace(av.seriesName, '').length !== 0) {
+            // *** 系列作品 ***
+            if (av.workName.includes(av.seriesName.trim())) {
+                // 作品名包含系列名
                 finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.workName.replace(av.seriesName, '').trim()}（${codify(av.code)}）${av.actress}.jpg`
-            } else if (av.workName.replace(av.seriesName, '').length === 0) {
+            } else if (!av.workName.includes(av.seriesName.trim())) {
+                // 作品名不含系列名
                 finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）.jpg`
             }
         } else {
-            finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}.jpg`;
+            // *** 单体作品 ***
+            finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}.jpg`
         }
     } else {
         // 欧美作品，无番号
