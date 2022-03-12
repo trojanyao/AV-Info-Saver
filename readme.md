@@ -1,3 +1,9 @@
+# 安装
+
+[点击安装](https://github.com/trojanyao/AV-Info-Quick-Save/blob/master/dist/index.prod.user.js)
+
+
+
 # This is a project help you build userscript with webpack
 
 Just [use this git repo as a template](https://github.com/Trim21/webpack-userscript-template/generate).
