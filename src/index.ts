@@ -5,10 +5,11 @@ import { createBtn } from './create-btn'
 import { final } from './utils/final'
 import { Madonna } from './makers/madonna'
 import { NA } from './makers/naughty-america'
+import { OnePondo } from './makers/1pondo'
 
 async function main() {
 	// 创建按钮
-	let a = createBtn() 
+	let a = createBtn()
 
 	// 核心功能
 	let domain = document.domain, url = document.URL;
@@ -17,13 +18,8 @@ async function main() {
 	async function trySwitch() {
 		switch (domain) {
 			case 'www.madonna-av.com': av = Madonna(url); break;
-			case 'www.naughtyamerica.com':
-				try {
-					av = await NA(url)
-				}catch(e) {
-
-				}
-				break;
+			case 'www.naughtyamerica.com': try { av = await NA(url) } catch (e) { }; break;
+			case 'www.1pondo.tv': try { av = await OnePondo(url) } catch (e) { }; break;
 		}
 	}
 	await trySwitch()
@@ -33,7 +29,7 @@ async function main() {
 		try {
 			a.download = await final(av)
 			a.href = av.imgUrl
-		} catch(e) {
+		} catch (e) {
 
 		}
 	}
@@ -44,6 +40,8 @@ async function main() {
 
 }
 
-main().catch((e) => {
-	console.log(e)
-})
+window.onload = () => {
+	main().catch((e) => {
+		console.log(e)
+	})
+}

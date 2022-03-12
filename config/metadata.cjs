@@ -9,7 +9,8 @@ module.exports = {
   // 'license': 'MIT',
   match: [
     'https://www.madonna-av.com/*',
-    'https://www.naughtyamerica.com/*'
+    'https://www.naughtyamerica.com/*',
+    'https://www.1pondo.tv/*',
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
