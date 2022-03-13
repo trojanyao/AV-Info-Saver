@@ -19277,7 +19277,7 @@ async function final_final(av) {
       // *** 系列作品 ***
       if (av.workName.includes(av.seriesName.trim())) {
         // 作品名包含系列名
-        finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.workName.replace(av.seriesName, '').trim()}（${codify(av.code)}）${av.actress}.jpg`;
+        finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}.jpg`;
       } else if (!av.workName.includes(av.seriesName.trim())) {
         // 作品名不含系列名
         finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）.jpg`;
