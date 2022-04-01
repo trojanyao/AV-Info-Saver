@@ -1,5 +1,3 @@
-import moment from "moment";
-
 export async function NA(url) {
     // 定义页面元素
     let workName, seriesName, date, actress = [], code, duration, resolution = [], imgUrl
@@ -10,13 +8,13 @@ export async function NA(url) {
         console.log('数据列表', infoList);
 
         // 作品名
-        workName = document.querySelector('.scene-title').innerText.replace(': ', ' — ');
+        workName = document.querySelector('.scene-title').innerText;
 
         // 系列名
         seriesName = document.querySelector('.site-title').innerHTML;
 
         // 日期
-        date = moment(infoList.querySelector('.entry-date').innerText).format('YYYY.MM.DD')
+        date = new Date(infoList.querySelector('.entry-date').innerText).toLocaleDateString('zh-CN');
 
         // 演员列表
         let aList = infoList.querySelectorAll('.performer-list > a');
@@ -33,9 +31,10 @@ export async function NA(url) {
         try {
             const blob = await res.blob()
             imgUrl = window.URL.createObjectURL(blob)
-        } catch(e) {
+        } catch (e) {
         }
 
+        // 时长
         duration = infoList.querySelector('.duration').innerText.match(/\d+\ min/g)[0].replace(' ', '')
 
         let label = infoList.querySelectorAll('.flag-bg')
@@ -57,7 +56,7 @@ export async function NA(url) {
             code: code,
             duration: duration,
             resolution: resolution,
-            imgUrl: imgUrl,
+            imgUrl: '',
         }
         console.log('NA AV 对象', av)
         return av

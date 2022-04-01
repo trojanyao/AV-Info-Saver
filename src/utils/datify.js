@@ -7,7 +7,7 @@ export function datify(date) {
         newDate = date
     } else if (/\d+\/\d+\/\d+/.test(date)) {
         // console.log('2')
-        newDate = date.replace(/\//g, '.')
+        newDate = new Date(date).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replaceAll('/', '.')
     } else {
         // console.log('3')
         let year = date.match(/(\d{4})年/)[1];

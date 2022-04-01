@@ -37,6 +37,8 @@ export async function final(av) {
             finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}${av.duration ? ` [${av.duration}]` : ``}.jpg`
         }
     } else {
+        // 替换半角冒号
+        av.workName = av.workName.includes(': ') ? av.workName.replace(': ', '-') : av.workName
         // 欧美作品，无番号
         let newActress = []
         for (let a of av.actress) {

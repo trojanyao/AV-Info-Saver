@@ -1,7 +1,7 @@
 {
   "name": "webpack-userscript-template",
   "description": "Build your UserScript with webpack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "TROJAN",
     "email": "ytj1996@sina.com"
@@ -20,8 +20,7 @@
   "dependencies": {
     "axios": "0.26.0",
     "axios-userscript-adapter": "0.1.11",
-    "jquery": "3.6.0",
-    "moment": "^2.29.1"
+    "jquery": "3.6.0"
   },
   "devDependencies": {
     "@babel/core": "7.17.5",
