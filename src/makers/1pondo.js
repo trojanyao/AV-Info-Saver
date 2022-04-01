@@ -2,7 +2,7 @@ import { codify } from "../utils/codify";
 
 export async function OnePondo(url) {
     // 定义页面元素
-    let workName, seriesName, date, actress = [], code, imgUrl
+    let workName, seriesName, date, actress = [], code, imgUrl, duration
     // 仅在作品页生效
     if (url.includes('https://www.1pondo.tv/movies/')) {
         // 展开信息列表
@@ -35,6 +35,9 @@ export async function OnePondo(url) {
         // 封面地址
         imgUrl = `https://www.1pondo.tv/assets/sample/${code}/str.jpg`
 
+        // 时长
+        duration = infoList[3].querySelector('.spec-content').innerText.replaceAll(':', '.')
+
         let av = {
             makerName: '1 Pondo',
             workName: workName,
@@ -43,6 +46,7 @@ export async function OnePondo(url) {
             actress: actress,
             code: code,
             imgUrl: imgUrl,
+            duration: duration
         }
         console.log('1 Pondo AV 对象', av)
         return av

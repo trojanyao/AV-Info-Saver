@@ -27,14 +27,14 @@ export async function final(av) {
             // *** 系列作品 ***
             if (av.workName.includes(av.seriesName.trim())) {
                 // 作品名包含系列名
-                finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}.jpg`
+                finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}${av.duration ? ` [${av.duration}]` : ``}.jpg`
             } else if (!av.workName.includes(av.seriesName.trim())) {
                 // 作品名不含系列名
-                finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）.jpg`
+                finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`
             }
         } else {
             // *** 单体作品 ***
-            finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}.jpg`
+            finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}${av.duration ? ` [${av.duration}]` : ``}.jpg`
         }
     } else {
         // 欧美作品，无番号

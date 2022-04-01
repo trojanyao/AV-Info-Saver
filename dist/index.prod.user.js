@@ -19223,13 +19223,13 @@ function datify(date) {
   let newDate; // console.log('传入的日期', date)
 
   if (/\d{4}\.\d{2}\.\d{2}/.test(date)) {
-    console.log('1');
+    // console.log('1')
     newDate = date;
   } else if (/\d+\/\d+\/\d+/.test(date)) {
-    console.log('2');
+    // console.log('2')
     newDate = date.replace(/\//g, '.');
   } else {
-    console.log('3');
+    // console.log('3')
     let year = date.match(/(\d{4})年/)[1];
     let month = date.match(/(\d{1,2})月/)[1];
     let day = date.match(/(\d{1,2})日/)[1];
@@ -19433,7 +19433,8 @@ async function OnePondo(url) {
       date,
       actress = [],
       code,
-      imgUrl; // 仅在作品页生效
+      imgUrl,
+      duration; // 仅在作品页生效
 
   if (url.includes('https://www.1pondo.tv/movies/')) {
     // 展开信息列表
@@ -19455,7 +19456,9 @@ async function OnePondo(url) {
 
     code = url.match(/\d+_\d+/)[0]; // 封面地址
 
-    imgUrl = `https://www.1pondo.tv/assets/sample/${code}/str.jpg`;
+    imgUrl = `https://www.1pondo.tv/assets/sample/${code}/str.jpg`; // 时长
+
+    duration = infoList[3].querySelector('.spec-content').innerText;
     let av = {
       makerName: '1 Pondo',
       workName: workName,
@@ -19463,7 +19466,8 @@ async function OnePondo(url) {
       date: date,
       actress: actress,
       code: code,
-      imgUrl: imgUrl
+      imgUrl: imgUrl,
+      duration: duration
     };
     console.log('1 Pondo AV 对象', av);
     return av;
