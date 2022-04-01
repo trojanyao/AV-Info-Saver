@@ -56,7 +56,7 @@ export async function NA(url) {
             code: code,
             duration: duration,
             resolution: resolution,
-            imgUrl: '',
+            imgUrl: imgUrl,
         }
         console.log('NA AV 对象', av)
         return av
