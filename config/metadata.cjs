@@ -11,6 +11,7 @@ module.exports = {
     'https://www.madonna-av.com/*',
     'https://www.naughtyamerica.com/*',
     'https://www.1pondo.tv/*',
+    'https://www.prestige-av.com/*'
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,

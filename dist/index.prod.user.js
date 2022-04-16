@@ -7,6 +7,7 @@
 // @match       https://www.madonna-av.com/*
 // @match       https://www.naughtyamerica.com/*
 // @match       https://www.1pondo.tv/*
+// @match       https://www.prestige-av.com/*
 // @require     https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js
 // @require     https://cdn.jsdelivr.net/npm/axios@0.26.0/dist/axios.min.js
 // @require     https://cdn.jsdelivr.net/npm/axios-userscript-adapter@0.1.11/dist/axiosGmxhrAdapter.min.js
@@ -232,7 +233,7 @@ async function final_final(av) {
   av.workName = av.workName.trim();
 
   if (av.code) {
-    // 日本作品，有番号
+    // ---------- 日本作品，有番号 ----------
     // 处理演员列表（拼接）
     av.actress.map(a => {
       a = a.trim().replace(' ', '');
@@ -241,21 +242,32 @@ async function final_final(av) {
 
     if (av && av.seriesName) {
       // *** 系列作品 ***
-      if (av.workName.includes(av.seriesName.trim())) {
+      let subName; // 除系列名外剩下的名称
+
+      if (av.workName.includes('vol')) {
+        // if (av.workName.includes(av.seriesName.trim())) {
         // 作品名包含系列名
-        finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}${av.duration ? ` [${av.duration}]` : ``}.jpg`;
-      } else if (!av.workName.includes(av.seriesName.trim())) {
-        // 作品名不含系列名
-        finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`;
+        finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.workName.replace(av.seriesName, '').trim()}（${codify(av.code)}）${av.actress}${av.duration ? ` [${av.duration}]` : ``}.jpg`; // } else if (!av.workName.includes(av.seriesName.trim())) {
+        //     // 作品名不含系列名
+        //     finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`
+        // }
+      } else {
+        if (av.workName.includes(av.seriesName.trim())) {
+          // 作品名包含系列名
+          finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}${av.duration ? ` [${av.duration}]` : ``}.jpg`;
+        } else if (!av.workName.includes(av.seriesName.trim())) {
+          // 作品名不含系列名
+          finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`;
+        }
       }
     } else {
       // *** 单体作品 ***
       finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}${av.duration ? ` [${av.duration}]` : ``}.jpg`;
     }
   } else {
+    // ---------- 欧美作品，无番号 ----------
     // 替换半角冒号
-    av.workName = av.workName.includes(': ') ? av.workName.replace(': ', '-') : av.workName; // 欧美作品，无番号
-
+    av.workName = av.workName.includes(': ') ? av.workName.replace(': ', '-') : av.workName;
     let newActress = [];
 
     for (let a of av.actress) {
@@ -370,7 +382,7 @@ async function NA(url) {
       code: code,
       duration: duration,
       resolution: resolution,
-      imgUrl: ''
+      imgUrl: imgUrl
     };
     console.log('NA AV 对象', av);
     return av;
@@ -425,10 +437,75 @@ async function OnePondo(url) {
     return av;
   }
 }
+;// CONCATENATED MODULE: ./src/makers/prestige.js
+// 厂商名转换列表
+const makerJSON = `{
+    "プレステージ": "Prestige"
+}`;
+async function Prestige(url) {
+  // 定义页面元素
+  let makerName,
+      workName,
+      seriesName,
+      date,
+      actress = [],
+      code,
+      imgUrl,
+      duration; // 仅在作品页生效
+
+  if (url.includes('https://www.prestige-av.com/goods/')) {
+    var _code$match, _code$match2;
+
+    // 作品信息列表
+    let keyList = document.querySelectorAll('dl.spec_layout > dt');
+    let infoList = document.querySelectorAll('dl.spec_layout > dd'); // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+
+    keyList = [...keyList].map(key => {
+      return key.innerText;
+    });
+    console.log('数据列表', keyList, infoList); // 厂商名
+
+    let makerTrans = JSON.parse(makerJSON);
+    makerName = makerTrans[infoList[3].innerText] ?? infoList[3].innerText; // 作品名
+
+    workName = document.querySelector('.product_title_layout_01 > h1').innerText.replace(/\＋\S+/, ''); // 系列名
+
+    seriesName = keyList.includes('シリーズ：') ? infoList[6].innerText : null; // 如果包含系列字段，说明有系列名称
+    // 日期
+
+    date = infoList[2].innerText; // 演员列表
+    // let aList = infoList[1].querySelectorAll('.spec-content > span')
+    // aList.forEach(a => actress.push(a.innerText.trim()))
+
+    actress[0] = infoList[0].innerText.trim(); // 番号
+
+    code = infoList[4].innerText;
+    let codeCap = (_code$match = code.match(/[a-z,A-Z]+/)) === null || _code$match === void 0 ? void 0 : _code$match[0].toLowerCase();
+    let codeNum = (_code$match2 = code.match(/[0-9]+/)) === null || _code$match2 === void 0 ? void 0 : _code$match2[0];
+    console.log('番号', codeCap, codeNum); // 封面地址
+
+    imgUrl = document.querySelector('.package_layout > a > img').src.replace('pf_p', 'pb_e'); // 时长
+    // duration = infoList[3].querySelector('.spec-content').innerText.replaceAll(':', '.')
+
+    let av = {
+      makerName: makerName,
+      workName: workName,
+      seriesName: seriesName,
+      date: date,
+      actress: actress,
+      code: code,
+      imgUrl: imgUrl,
+      duration: duration
+    };
+    console.log('Prestige AV 对象', av);
+    return av;
+  }
+}
 ;// CONCATENATED MODULE: ./src/index.ts
 // import { get } from './utils'
 // import './style/main.less'
 // import { add } from './example'
+
 
 
 
@@ -461,6 +538,14 @@ async function main() {
       case 'www.1pondo.tv':
         try {
           av = await OnePondo(url);
+        } catch (e) {}
+
+        ;
+        break;
+
+      case 'www.prestige-av.com':
+        try {
+          av = await Prestige(url);
         } catch (e) {}
 
         ;

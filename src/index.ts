@@ -6,6 +6,7 @@ import { final } from './utils/final'
 import { Madonna } from './makers/madonna'
 import { NA } from './makers/naughty-america'
 import { OnePondo } from './makers/1pondo'
+import Prestige from './makers/prestige'
 
 async function main() {
 	// 创建按钮
@@ -20,6 +21,7 @@ async function main() {
 			case 'www.madonna-av.com': av = Madonna(url); break;
 			case 'www.naughtyamerica.com': try { av = await NA(url) } catch (e) { }; break;
 			case 'www.1pondo.tv': try { av = await OnePondo(url) } catch (e) { }; break;
+			case 'www.prestige-av.com': try { av = await Prestige(url) } catch (e) { }; break;
 		}
 	}
 	await trySwitch()
