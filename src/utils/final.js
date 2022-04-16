@@ -16,7 +16,7 @@ export async function final(av) {
     av.workName = av.workName.trim()
 
     if (av.code) {
-        // 日本作品，有番号
+        // ---------- 日本作品，有番号 ----------
         // 处理演员列表（拼接）
         av.actress.map(a => {
             a = a.trim().replace(' ', '')
@@ -27,7 +27,17 @@ export async function final(av) {
             // *** 系列作品 ***
             if (av.workName.includes(av.seriesName.trim())) {
                 // 作品名包含系列名
-                finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}${av.duration ? ` [${av.duration}]` : ``}.jpg`
+                if (av.workName.includes('vol')) {
+                    // 作品名中包含数字编号
+                    // if (av.workName.includes(av.seriesName.trim())) {
+                    finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.workName.replace(av.seriesName, '').trim()}（${codify(av.code)}）${av.actress}${av.duration ? ` [${av.duration}]` : ``}.jpg`
+                    // } else if (!av.workName.includes(av.seriesName.trim())) {
+                    //     // 作品名不含系列名
+                    //     finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`
+                    // }
+                } else {
+                    finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}${av.duration ? ` [${av.duration}]` : ``}.jpg`
+                }
             } else if (!av.workName.includes(av.seriesName.trim())) {
                 // 作品名不含系列名
                 finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`
@@ -37,9 +47,9 @@ export async function final(av) {
             finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}${av.duration ? ` [${av.duration}]` : ``}.jpg`
         }
     } else {
+        // ---------- 欧美作品，无番号 ----------
         // 替换半角冒号
         av.workName = av.workName.includes(': ') ? av.workName.replace(': ', '-') : av.workName
-        // 欧美作品，无番号
         let newActress = []
         for (let a of av.actress) {
             await newActress.push(a.toLowerCase().replace(/\b(\w)|\s(\w)/g, s => s.toUpperCase()))
