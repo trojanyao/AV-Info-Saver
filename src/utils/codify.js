@@ -1,6 +1,9 @@
 // 品番 标准化
-export function codify(code: string) {
-    if (/[a-z,A-Z]/.test(code)) {
+export function codify(code) {
+    if (/n\d+/.test(code)) {
+        // 東京熱番号
+        return code
+    } else if (/[a-z,A-Z]/.test(code)) {
         // 有字母的番号
         // 番号数字位
         let codeNum = code.match(/\d+/)
