@@ -56,11 +56,18 @@ export default async function TokyoHot(url) {
         } catch (e) {
         }
 
-
         // 时长
         let durIndex = keyList.findIndex(key => key.innerText.includes('収録時間'))
         duration = infoList[durIndex].innerText.replaceAll(':', '.')
         console.log('时长', durIndex, duration)
+
+        // 清晰度和大小
+        let sizeInfo = document.querySelectorAll('.download')[1].querySelector('.dbox')
+        let format = sizeInfo.querySelector('h4').innerText.match(/MP4|WMV/g)?.[0]
+        let size = sizeInfo.querySelector('h4').innerText.match(/\d+.\d+/g)?.[0]
+        let resolution = sizeInfo.querySelector('p').innerText.match(/x(\d+)/)?.[1]
+        console.log('大小', '格式', parseFloat(size).toFixed(1), format, resolution)
+        resolution = `${parseFloat(size).toFixed(1)}GB-${format}-${resolution}p`
 
         let av = {
             makerName: '東京熱',
@@ -71,6 +78,7 @@ export default async function TokyoHot(url) {
             code: code,
             imgUrl: imgUrl,
             duration: duration,
+            resolution: resolution,
         }
         console.log('TokyoHot AV 对象', av)
         return av

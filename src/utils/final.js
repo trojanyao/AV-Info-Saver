@@ -29,23 +29,25 @@ export async function final(av) {
                 // 作品名包含系列名
                 if (av.workName.includes('vol')) {
                     // 作品名中包含数字编号
-                    // if (av.workName.includes(av.seriesName.trim())) {
-                    finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.workName.replace(av.seriesName, '').trim()}（${codify(av.code)}）${av.actress}${av.duration ? ` [${av.duration}]` : ``}.jpg`
-                    // } else if (!av.workName.includes(av.seriesName.trim())) {
-                    //     // 作品名不含系列名
-                    //     finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`
-                    // }
+                    finalName = `${av.workName.replace(av.seriesName, '').trim()}
+                                （${codify(av.code)}）
+                                 ${av.actress}`
                 } else {
-                    finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}${av.duration ? ` [${av.duration}]` : ``}.jpg`
+                    finalName = `${av.actress}
+                                （${codify(av.code)}）
+                                 ${av.workName.replace(av.seriesName, '').trim()}`
                 }
             } else if (!av.workName.includes(av.seriesName.trim())) {
                 // 作品名不含系列名
-                finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`
+                finalName = `${av.actress}（${codify(av.code)}）`
             }
+            finalName = `${av.seriesName}（${datify(av.date)}）${finalName}`
         } else {
             // *** 单体作品 ***
-            finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}${av.duration ? ` [${av.duration}]` : ``}.jpg`
+            finalName = `（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}`
         }
+
+        finalName = `【${av.makerName}】${finalName}${av.duration ? (av.resolution ? ` [${av.duration}; ${av.resolution}]` : ` [${av.duration}]`) : ''}.jpg`
     } else {
         // ---------- 欧美作品，无番号 ----------
         // 替换半角冒号
