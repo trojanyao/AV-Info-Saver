@@ -32,6 +32,7 @@ export async function NA(url) {
             const blob = await res.blob()
             imgUrl = window.URL.createObjectURL(blob)
         } catch (e) {
+            console.log('下载图片失败', e)
         }
 
         // 时长
