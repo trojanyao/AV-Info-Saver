@@ -5,6 +5,7 @@ import { NA } from './makers/naughty-america'
 import { OnePondo } from './makers/1pondo'
 import Prestige from './makers/prestige'
 import TokyoHot from './makers/tokyo-hot'
+import Brazzers from './makers/brazzers'
 
 async function main() {
 	// 创建按钮
@@ -21,19 +22,36 @@ async function main() {
 			case 'www.1pondo.tv': try { av = await OnePondo(url) } catch (e) { }; break;
 			case 'www.prestige-av.com': try { av = await Prestige(url) } catch (e) { }; break;
 			case 'my.tokyo-hot.com': try { av = await TokyoHot(url) } catch (e) { }; break;
+			case 'www.brazzers.com': try {
+				setTimeout(async () => {
+					av = await Brazzers(url)
+					if (av) {
+						console.log('AV对象', av)
+						try {
+							a.download = await final(av)
+							a.href = av.imgUrl
+						} catch (e) {
+
+						}
+					}
+				}, 2000)
+			} catch (e) { }; break;
 		}
 	}
-	await trySwitch()
 
-	if (av) {
-		console.log('AV对象', av)
-		try {
-			a.download = await final(av)
-			a.href = av.imgUrl
-		} catch (e) {
+	trySwitch().then(
+		async () => {
+			if (av) {
+				console.log('AV对象', av)
+				try {
+					a.download = await final(av)
+					a.href = av.imgUrl
+				} catch (e) {
 
+				}
+			}
 		}
-	}
+	)
 
 	// if (autoSave === 'yes') {
 	// 	a.click();
@@ -41,8 +59,10 @@ async function main() {
 
 }
 
-window.onload = () => {
-	main().catch((e) => {
+window.onload = async () => {
+	try {
+		await main()
+	} catch (e) {
 		console.log(e)
-	})
+	}
 }
