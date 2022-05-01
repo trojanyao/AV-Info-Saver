@@ -51,7 +51,7 @@ export async function final(av) {
     } else {
         // ---------- 欧美作品，无番号 ----------
         // 替换半角冒号
-        av.workName = av.workName.includes(': ') ? av.workName.replace(': ', '-') : av.workName
+        av.workName = av.workName.replace(': ', '-')
         let newActress = []
         for (let a of av.actress) {
             await newActress.push(a.toLowerCase().replace(/\b(\w)|\s(\w)/g, s => s.toUpperCase()))
@@ -59,9 +59,9 @@ export async function final(av) {
 
         console.log('修改后的演员列表', newActress)
 
-        finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(', ')} - ${av.workName} [${av.duration}; ${av.resolution.join(', ')}].jpg`
+        finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(', ')} - ${av.workName}${av.duration ? `[${av.duration}; ${av.resolution.join(', ')}]` : ''}.jpg`
     }
-    console.log('最后拼接的文件名', finalName);
+    console.log('最后拼接的文件名', finalName)
 
     return finalName
 }
