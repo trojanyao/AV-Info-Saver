@@ -33,10 +33,11 @@ export default async function Prestige(url) {
         // 演员列表
         // let aList = infoList[1].querySelectorAll('.spec-content > span')
         // aList.forEach(a => actress.push(a.innerText.trim()))
-        actress[0] = infoList[0].innerText.trim()
+        actress[0] = infoList[0].innerText
+        console.log('演员列表', actress)
 
         // 番号
-        code = infoList[4].innerText
+        code = infoList[4].innerText.replace('TKT', '')
         let codeCap = code.match(/[a-z,A-Z]+/)?.[0].toLowerCase()
         let codeNum = code.match(/[0-9]+/)?.[0]
         console.log('番号', codeCap, codeNum)

@@ -9,29 +9,36 @@ const DIGIT_TYPE = [
 export async function final(av) {
     let finalName;
     console.log('传入的 AV 对象', av)
-
-    // ***** 处理标题 *****
-    // 去末尾演员名
-    let endAct = new RegExp(av.actress[0] + '$', 'g')
-    if (endAct.test(av.workName)) {
-        av.workName = av.workName.replace(av.actress[0], '')
-    }
-    // 头尾去空格
-    av.workName = av.workName.trim()
-
     if (av.code) {
         // ---------- 日本作品，有番号 ----------
-        // 处理演员列表（拼接）
-        av.actress.map(a => {
-            a = a.trim().replace(' ', '')
+        // ***** 处理演员列表 *****
+        av.actress = av.actress.map(a => {
+            if (!a.trim().match(/[a-zA-Z]+/g)) {
+                // 仅处理日本演员名称中的空格
+                return a.replaceAll(/\s/g, '').trim()
+            }
         })
+        console.log('去空格后的演员列表', av.actress)
         av.actress = av.actress.join(' ')
+
+        // ***** 处理标题 *****
+        // 去头尾演员名
+        let startAct = new RegExp('^' + av.actress, 'g')
+        let endAct = new RegExp(av.actress + '$', 'g')
+        console.log('头尾演员名', endAct.test(av.workName))
+        if (startAct.test(av.workName) || endAct.test(av.workName)) {
+            console.log('替换')
+            av.workName = av.workName.replace(av.actress, '')
+        }
+        // 头尾去空格
+        av.workName = av.workName.trim()
+        console.log('标题', av.workName)
 
         if (av && av.seriesName) {
             // *** 系列作品 ***
             if (av.workName.includes(av.seriesName.trim())) {
-                let hasDigit
-                hasDigit = DIGIT_TYPE.find(d => av.workName.includes(d))
+                // 作品名包含数字编号或纯数字
+                let hasDigit = DIGIT_TYPE.find(d => av.workName.includes(d)) || av.workName.match(/\d+$/g)
                 console.log('作品名是否包含数字编号', hasDigit)
                 // 作品名包含系列名
                 if (hasDigit) {
