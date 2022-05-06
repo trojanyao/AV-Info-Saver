@@ -1,5 +1,9 @@
 import { datify } from './datify';
 import { codify } from './codify';
+const DIGIT_TYPE = [
+    'vol',
+    'Vol',
+]
 
 // 拼接最后文件名
 export async function final(av) {
@@ -26,16 +30,15 @@ export async function final(av) {
         if (av && av.seriesName) {
             // *** 系列作品 ***
             if (av.workName.includes(av.seriesName.trim())) {
+                let hasDigit
+                hasDigit = DIGIT_TYPE.find(d => av.workName.includes(d))
+                console.log('作品名是否包含数字编号', hasDigit)
                 // 作品名包含系列名
-                if (av.workName.includes('vol')) {
+                if (hasDigit) {
                     // 作品名中包含数字编号
-                    finalName = `${av.workName.replace(av.seriesName, '').trim()}
-                                （${codify(av.code)}）
-                                 ${av.actress}`
+                    finalName = `${av.workName.replace(av.seriesName, '').trim()}（${codify(av.code)}）${av.actress}`
                 } else {
-                    finalName = `${av.actress}
-                                （${codify(av.code)}）
-                                 ${av.workName.replace(av.seriesName, '').trim()}`
+                    finalName = `${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}`
                 }
             } else if (!av.workName.includes(av.seriesName.trim())) {
                 // 作品名不含系列名
