@@ -6,6 +6,7 @@ import { OnePondo } from './makers/1pondo'
 import Prestige from './makers/prestige'
 import TokyoHot from './makers/tokyo-hot'
 import Brazzers from './makers/brazzers'
+import Caribbean from './makers/caribbean'
 
 async function main() {
 	// 创建按钮
@@ -18,10 +19,10 @@ async function main() {
 	async function trySwitch() {
 		switch (domain) {
 			case 'www.madonna-av.com': av = Madonna(url); break;
-			case 'www.naughtyamerica.com': try { av = await NA(url) } catch (e) { }; break;
-			case 'www.1pondo.tv': try { av = await OnePondo(url) } catch (e) { }; break;
-			case 'www.prestige-av.com': try { av = await Prestige(url) } catch (e) { }; break;
-			case 'my.tokyo-hot.com': try { av = await TokyoHot(url) } catch (e) { }; break;
+			case 'www.naughtyamerica.com': try { av = await NA(url) } catch { }; break;
+			case 'www.1pondo.tv': try { av = await OnePondo(url) } catch { }; break;
+			case 'www.prestige-av.com': try { av = await Prestige(url) } catch { }; break;
+			case 'my.tokyo-hot.com': try { av = await TokyoHot(url) } catch { }; break;
 			case 'www.brazzers.com': try {
 				setTimeout(async () => {
 					av = await Brazzers(url)
@@ -36,6 +37,7 @@ async function main() {
 					}
 				}, 2000)
 			} catch (e) { }; break;
+			case 'www.caribbeancom.com': try { av = await Caribbean(url) } catch { }; break;
 		}
 	}
 
