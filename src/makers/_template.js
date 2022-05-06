@@ -42,10 +42,11 @@ export default async function Maker(url) {
             // } catch (e) {
             //     console.log('下载图片失败', e)
             // }
+            console.log('封面地址', imgUrl)
 
-            // 时长
-            // duration = 
-            console.log('时长', duration)
+        // 时长
+        // duration = 
+        console.log('时长', duration)
 
         // 清晰度和大小
         // resolution = 
