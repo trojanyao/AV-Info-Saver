@@ -3,16 +3,16 @@ export default async function Maker(url) {
     let workName, seriesName, date, actress = [], code, imgUrl, duration, resolution
     // 仅在作品页生效
     if (url.includes('')) {
+        // 作品名
+        // workName = 
+        console.log('作品名', workName)
+
         // 页面数据列表
         // let infoList = document.querySelectorAll('dl.info > dd')
         // let keyList = document.querySelectorAll('dl.info > dt')
         // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
         // keyList = Array.from(keyList)
         console.log('数据列表', infoList)
-
-        // 作品名
-        // workName = 
-        console.log('作品名', workName)
 
         // 系列名
         // seriesName = 
