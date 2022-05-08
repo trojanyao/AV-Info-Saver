@@ -7,6 +7,7 @@ import Prestige from './makers/prestige'
 import TokyoHot from './makers/tokyo-hot'
 import Brazzers from './makers/brazzers'
 import Caribbean from './makers/caribbean'
+import SOD from './makers/sod'
 
 async function main() {
 	// 创建按钮
@@ -38,6 +39,7 @@ async function main() {
 				}, 2000)
 			} catch (e) { }; break;
 			case 'www.caribbeancom.com': try { av = await Caribbean(url) } catch { }; break;
+			case 'ec.sod.co.jp': try { av = await SOD(url) } catch { }; break;
 		}
 	}
 

@@ -15,6 +15,8 @@ module.exports = {
     'https://my.tokyo-hot.com/*',
     'https://www.brazzers.com/*',
     'https://www.caribbeancom.com/*',
+    'https://ec.sod.co.jp/*',
+    '',
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
