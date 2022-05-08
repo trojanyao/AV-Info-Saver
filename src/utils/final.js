@@ -4,6 +4,7 @@ const DIGIT_TYPE = [
     'vol',
     'Vol',
     'Case',
+    'FILE',
 ]
 
 // 拼接最后文件名
@@ -102,7 +103,7 @@ export async function final(av) {
                     console.log('作品名中包含编号 && 有剩余部分', finalName)
                 } else if (realDigit && suffix.length <= 0) {
                     // 作品名中包含编号 && 无剩余部分：编号（番号）演员名
-                    finalName = `${realDigit}（${codify(av.code)}） ${av.actress}`
+                    finalName = `${realDigit}（${codify(av.code)}）${av.actress}`
                 } else {
                     // 作品名中不含编号：演员名（番号）剩余部分
                     finalName = `${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}`
