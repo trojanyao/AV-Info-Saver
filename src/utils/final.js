@@ -8,116 +8,118 @@ const DIGIT_TYPE = [
 ]
 
 // 拼接最后文件名
-export async function final(av) {
+export async function final(avObj) {
+    // 深拷贝
+    let av = JSON.parse(JSON.stringify(avObj))
     let finalName;
     console.log('传入的 AV 对象', av)
     if (av.code) {
         // ---------- 日本作品，有番号 ----------
         // ***** 处理演员列表 *****
-        av.actress = av.actress.map(a => {
-            if (!a.trim().match(/[a-zA-Z]+/g)) {
-                // 仅处理日本演员名称中的空格
-                return a.replaceAll(/\s/g, '').trim()
-            }
-        })
-        console.log('去空格后的演员列表', av.actress)
-        av.actress = av.actress.join(' ')
+        {
+            av.actress = av.actress.map(a => {
+                // 先剔除头尾空格
+                let newA = a.trim()
+                if (!newA.match(/[a-zA-Z]+/g)) {
+                    // 仅作用于非英文演员名：剔除内部空格
+                    newA = newA.replaceAll(/\s/g, '')
+                }
+                return newA
+            })
+            console.log('去空格后的演员列表', av.actress)
+            av.actress = av.actress.join(' ')
+        }
 
         // ***** 处理标题 *****
-        // 去头尾演员名
-        let startAct = new RegExp('^' + av.actress, 'g')
-        let endAct = new RegExp(av.actress + '$', 'g')
-        console.log('头尾演员名', startAct.test(av.workName))
-        if (startAct.test(av.workName) || endAct.test(av.workName)) {
-            console.log('替换')
-            av.workName = av.workName.replace(av.actress, '')
+        {
+            // 去头尾演员名
+            let startAct = new RegExp('^' + av.actress, 'g')
+            let endAct = new RegExp(av.actress + '$', 'g')
+            console.log('头尾演员名', startAct.test(av.workName))
+            if (startAct.test(av.workName) || endAct.test(av.workName)) {
+                console.log('替换')
+                av.workName = av.workName.replace(av.actress, '')
+            }
+            // 头尾去空格
+            av.workName = av.workName.trim()
+            console.log('标题', av.workName)
         }
-        // 头尾去空格
-        av.workName = av.workName.trim()
-        console.log('标题', av.workName)
-        av.seriesName = av.seriesName.trim()
 
         if (av && av.seriesName) {
-            // *** 系列作品 ***
+            // ***** 系列作品 *****
+            av.seriesName = av.seriesName.trim()
 
-            // --- 检查作品名是否包含编号 ---
+            /* 包含编号：检测作品名是否包含编号 */
             // 是否包含编号标识
             let hasIndicator = DIGIT_TYPE.findIndex(d => av.workName.includes(d))
-            let indicator = DIGIT_TYPE[hasIndicator]
             console.log('编号标识数组位置', hasIndicator)
-            // 是否包含纯数字编号
-            let hasDigit = av.workName.match(/^(\W+\s*)\d+/)
-            let hasNum = hasIndicator !== -1 || hasDigit
+            // 标识类型
+            let indicator = DIGIT_TYPE[hasIndicator]
+            // 是否包含纯数字
+            let hasDigit = /^(\W+\s*)\d+/.test(av.workName)
+            console.log('是否有纯数字', hasDigit)
+
+            let hasNum = (hasIndicator !== -1) || hasDigit
             console.log('作品名是否包含编号', hasNum)
 
-            // 提取作品名中的系列名前缀、剩余部分
-            let workPrefix, suffix
-            if (hasNum) {
-                if (hasIndicator !== -1) {
-                    // 作品名包含编号标识，提取标识之前的内容
-                    let indicatorIndex = av.workName.indexOf(indicator)
-                    console.log('编号标识起始位置', indicatorIndex)
-                    workPrefix = av.workName.slice(0, indicatorIndex)
-                } else if (hasDigit[0]) {
-                    // 作品名包含纯数字，提取纯数字之前的内容
-                    workPrefix = hasDigit[1]
-                }
-            }
-            console.log('作品名前缀', workPrefix)
-
-            // 判断作品名和系列名之间的关系
+            /* 不含编号：检测作品名前缀（空格之前的内容）和系列名的关系 */
+            let workPrefix = av.workName?.match(/^(\S+)\s+([\S\s]+)/)
+            console.log('作品名前缀', workPrefix[1])
+            // 判断作品名前缀和系列名之间的关系
             // 作品名包含系列名
-            let workHasSeries = workPrefix.trim().replaceAll(' ', '').includes(av.seriesName)
+            let workHasSeries = workPrefix[0] ? workPrefix[1].trim().replaceAll(' ', '').includes(av.seriesName) : false
             console.log('作品名前缀中包含系列名', workHasSeries)
             // 系列名是否包含作品名
-            let seriesHasWork = av.seriesName.includes(workPrefix.trim().replaceAll(' ', ''))
+            let seriesHasWork = av.seriesName.includes(workPrefix[1]?.trim().replaceAll(' ', ''))
             console.log('系列名中包含作品名前缀', seriesHasWork)
+            /* 作品名前缀包含系列名，或系列名包含作品名前缀，说明作品名包含系列名 */
 
 
-            if (workHasSeries || seriesHasWork) {
-                // 作品名包含系列名
-                console.log('作品名', av.workName, '系列名', av.seriesName)
-                let suffix = av.workName.replace(workPrefix, '')
-                console.log('剩余部分', suffix)
+            if (hasNum) {
+                // ----- 作品名包含系列名（含编号）-----
+                // 格式：系列名（日期）编号 演员名（）作品名剩余部分
 
                 // 标识符和编号部分
-                let digitTypeA = suffix.match(new RegExp(indicator + '[\\S\\s]*\\d+$'))?.[0]
+                let digitTypeA = av.workName.match(new RegExp(indicator + '[\\S\\s]*\\d+$'))?.[0]
                 console.log('标识符和编号部分', digitTypeA)
                 // 纯数字部分
-                let digitTypeB = suffix.match(/^\d+/)?.[0]
+                let digitTypeB = av.workName.match(/\d+/)?.[0]
                 console.log('纯数字部分', digitTypeB)
 
-                let realDigit = digitTypeA ?? digitTypeB
-                console.log('编号部分', realDigit)
+                // 编号部分
+                let num = digitTypeA ?? digitTypeB
+                console.log('编号部分', num)
 
-                if (digitTypeA) {
-                    suffix = suffix.replace(digitTypeA, '').trim()
-                } else if (digitTypeB) {
-                    suffix = suffix.replace(digitTypeB, '').trim()
-                }
-                console.log('剩余部分', suffix.length)
-
-                if (realDigit && suffix.length > 0) {
-                    // 作品名中包含编号 && 有剩余部分：编号 演员名（番号）剩余部分
-                    finalName = `${realDigit}${av.actress.length > 0 ? ` ${av.actress}` : ''}（${codify(av.code)}）${suffix}`
-                    console.log('作品名中包含编号 && 有剩余部分', finalName)
-                } else if (realDigit && suffix.length <= 0) {
-                    // 作品名中包含编号 && 无剩余部分：编号（番号）演员名
-                    finalName = `${realDigit}（${codify(av.code)}）${av.actress}`
+                // 剩余部分的两种情况
+                let suffix = av.workName.match(new RegExp(num + '\\s*([\\S\\s]+)$'))?.[1]
+                if (suffix) {
+                    // 有剩余部分
+                    finalName = `${av.seriesName}（${datify(av.date)}）${num} ${av.actress}（${av.code}）${suffix}`
                 } else {
-                    // 作品名中不含编号：演员名（番号）剩余部分
-                    finalName = `${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}`
+                    finalName = `${av.seriesName}（${datify(av.date)}）${num}（${av.code}）${av.actress}`
                 }
-            } else if (!av.workName.includes(av.seriesName.trim())) {
-                // 作品名不含系列名
-                finalName = `${av.actress}（${codify(av.code)}）`
+                // 有剩余部分
+                console.log('有编号的作品剩余部分', finalName)
+            } else if (workHasSeries || seriesHasWork) {
+                // ----- 作品名包含系列名（不含编号）-----
+                // 格式：系列名（日期）演员名（番号）作品名剩余部分
+
+                // 剩余部分 = 作品名剔除前缀
+                let suffix = workPrefix?.[2]
+                finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`
+            } else {
+                // --- 作品名不含系列名 ---
+                // 格式：系列名（日期）演员名（番号）作品名剩余部分
+
+                // 剩余部分 = 原始作品名
+                let suffix = av.workName
+                finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`
             }
-            // 系列名（日期）
-            finalName = `${av.seriesName}（${datify(av.date)}）${finalName}`
         } else {
             // *** 单体作品 ***
             //（日期）演员（番号）作品名
             finalName = `（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}`
+            console.log('单体作品', finalName)
         }
 
         finalName = `【${av.makerName}】${finalName}${av.duration ? (av.resolution ? ` [${av.duration}; ${av.resolution}]` : ` [${av.duration}]`) : ''}.jpg`
