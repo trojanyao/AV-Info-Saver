@@ -55,6 +55,7 @@ export function createBtn() {
     menuDiv.style.marginLeft = '10px';
     menuDiv.style.display = 'flex';
     menuDiv.style.flexDirection = 'column';
+    menuDiv.style.color = '#333333'
     menuDiv.style.fontFamily = '"PingFang SC", sans-serif';
     // ** 标题 **
     titleDiv.id = 'title';
@@ -63,7 +64,7 @@ export function createBtn() {
     titleDiv.style.fontWeight = '600';
     menuDiv.appendChild(titleDiv);
     // ** 菜单 **
-    toggleDiv.style.marginTop = '10px';
+    // toggleDiv.style.marginTop = '10px';
     toggleDiv.style.width = document.querySelector('#title').offsetWidth;
     toggleDiv.style.display = 'flex';
     toggleDiv.style.flexDirection = 'row';
