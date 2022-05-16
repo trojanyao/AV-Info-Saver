@@ -90,15 +90,9 @@ export async function final(avObj) {
                 let num = digitTypeA ?? digitTypeB
                 console.log('编号部分', num)
 
-                // 剩余部分的两种情况
-                let suffix = av.workName.match(new RegExp(num + '\\s*([\\S\\s]+)$'))?.[1]
-                if (suffix) {
-                    // 有剩余部分
-                    finalName = `${av.seriesName}（${datify(av.date)}）${num} ${av.actress}（${av.code}）${suffix}`
-                } else {
-                    finalName = `${av.seriesName}（${datify(av.date)}）${num}（${av.code}）${av.actress}`
-                }
-                // 有剩余部分
+                // 为了名称简单，不再显示剩余部分
+                // let suffix = av.workName.match(new RegExp(num + '\\s*([\\S\\s]+)$'))?.[1]
+                finalName = `${av.seriesName}（${datify(av.date)}）${num}（${av.code}）${av.actress}`
                 console.log('有编号的作品剩余部分', finalName)
             } else if (workHasSeries || seriesHasWork) {
                 // ----- 作品名包含系列名（不含编号）-----
