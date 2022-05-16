@@ -35,9 +35,8 @@ export async function final(avObj) {
             // 去头尾演员名
             let startAct = new RegExp('^' + av.actress, 'g')
             let endAct = new RegExp(av.actress + '$', 'g')
-            console.log('头尾演员名', startAct.test(av.workName))
+            console.log('头尾是否包含演员名', startAct.test(av.workName))
             if (startAct.test(av.workName) || endAct.test(av.workName)) {
-                console.log('替换')
                 av.workName = av.workName.replace(av.actress, '')
             }
             // 头尾去空格
@@ -46,7 +45,7 @@ export async function final(avObj) {
         }
 
         if (av && av.seriesName) {
-            // ***** 系列作品 *****
+            console.log('***** 系列作品 *****')
             av.seriesName = av.seriesName.trim()
 
             /* 包含编号：检测作品名是否包含编号 */
@@ -63,14 +62,14 @@ export async function final(avObj) {
             console.log('作品名是否包含编号', hasNum)
 
             /* 不含编号：检测作品名前缀（空格之前的内容）和系列名的关系 */
-            let workPrefix = av.workName?.match(/^(\S+)\s+([\S\s]+)/)
-            console.log('作品名前缀', workPrefix[1])
+            let workPrefix = av.workName?.match(/^(\S+)\s+(\S+)/)
+            console.log('作品名前缀', workPrefix?.[1])
             // 判断作品名前缀和系列名之间的关系
             // 作品名包含系列名
-            let workHasSeries = workPrefix[0] ? workPrefix[1].trim().replaceAll(' ', '').includes(av.seriesName) : false
+            let workHasSeries = workPrefix?.[0] ? workPrefix[1].trim().replaceAll(' ', '').includes(av.seriesName) : false
             console.log('作品名前缀中包含系列名', workHasSeries)
             // 系列名是否包含作品名
-            let seriesHasWork = av.seriesName.includes(workPrefix[1]?.trim().replaceAll(' ', ''))
+            let seriesHasWork = av.seriesName.includes(workPrefix?.[1].trim().replaceAll(' ', ''))
             console.log('系列名中包含作品名前缀', seriesHasWork)
             /* 作品名前缀包含系列名，或系列名包含作品名前缀，说明作品名包含系列名 */
 
@@ -110,7 +109,7 @@ export async function final(avObj) {
                 finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`
             }
         } else {
-            // *** 单体作品 ***
+            console.log('***** 单体作品 *****')
             //（日期）演员（番号）作品名
             finalName = `（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}`
             console.log('单体作品', finalName)
