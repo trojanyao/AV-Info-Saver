@@ -6,6 +6,9 @@ const DIGIT_TYPE = [
     'Case',
     'FILE',
 ]
+const DIGIT_FIRST_SERIES = [
+    'ラグジュTV'
+]
 
 // 拼接最后文件名
 export async function final(avObj) {
@@ -21,8 +24,10 @@ export async function final(avObj) {
                 // 先剔除头尾空格
                 let newA = a.trim()
                 if (!newA.match(/[a-zA-Z]+/g)) {
-                    // 仅作用于非英文演员名：剔除内部空格
-                    newA = newA.replaceAll(/\s/g, '')
+                    // 仅作用于非英文演员、非素人演员：剔除内部空格
+                    if (!av.actressRealName) {
+                        newA = newA.replaceAll(/\s/g, '')
+                    }
                 }
                 return newA
             })
@@ -56,8 +61,9 @@ export async function final(avObj) {
             console.log('编号标识数组位置', hasIndicator)
             // 标识类型
             let indicator = DIGIT_TYPE[hasIndicator]
+            console.log('编号标识', indicator)
             // 是否包含纯数字
-            let hasDigit = /^(\W+\s*)\d+/.test(av.workName)
+            let hasDigit = /\d+/.test(av.workName)
             console.log('是否有纯数字', hasDigit)
 
             let hasNum = (hasIndicator !== -1) || hasDigit
@@ -78,14 +84,14 @@ export async function final(avObj) {
 
             if (hasNum) {
                 // ----- 作品名包含系列名（含编号）-----
-                // 格式：系列名（日期）编号 演员名（）作品名剩余部分
+                // 格式：系列名（日期）编号 演员名（）
 
-                // 标识符和编号部分
-                let digitTypeA = av.workName.match(new RegExp(indicator + '[\\S\\s]*\\d+$'))?.[0]
-                console.log('标识符和编号部分', digitTypeA)
                 // 纯数字部分
                 let digitTypeB = av.workName.match(/\d+/)?.[0]
                 console.log('纯数字部分', digitTypeB)
+                // 标识符和编号部分
+                let digitTypeA = av.workName.match(new RegExp(indicator + '[\\S\\s]*' + digitTypeB))?.[0]
+                console.log('标识符和编号部分', digitTypeA)
 
                 // 编号部分
                 let num = digitTypeA ?? digitTypeB
@@ -93,7 +99,13 @@ export async function final(avObj) {
 
                 // 为了名称简单，不再显示剩余部分
                 // let suffix = av.workName.match(new RegExp(num + '\\s*([\\S\\s]+)$'))?.[1]
-                finalName = `${av.seriesName}（${datify(av.date)}）${num}（${av.code}）${av.actress}`
+                let digitFirstSeries = DIGIT_FIRST_SERIES.find(x => av.seriesName === x)
+                console.log('是否属于编号在前日期在后的特殊系列', digitFirstSeries)
+                if (digitFirstSeries) {
+                    finalName = `${av.seriesName} ${num}（${datify(av.date)}）${av.actress}（${av.code}）${av.actressRealName ?? ''}`
+                } else {
+                    finalName = `${av.seriesName}（${datify(av.date)}）${num}（${av.code}）${av.actress}`
+                }
                 console.log('有编号的作品剩余部分', finalName)
             } else if (workHasSeries || seriesHasWork) {
                 // ----- 作品名包含系列名（不含编号）-----
@@ -102,6 +114,7 @@ export async function final(avObj) {
                 // 剩余部分 = 作品名剔除前缀
                 let suffix = workPrefix?.[2]
                 finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`
+                console.log('作品名包含系列名（不含编号）', finalName)
             } else {
                 // --- 作品名不含系列名 ---
                 // 格式：系列名（日期）演员名（番号）作品名剩余部分
