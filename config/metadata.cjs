@@ -16,7 +16,7 @@ module.exports = {
     'https://www.brazzers.com/*',
     'https://www.caribbeancom.com/*',
     'https://ec.sod.co.jp/*',
-    '',
+    'https://www.mgstage.com/*',
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,

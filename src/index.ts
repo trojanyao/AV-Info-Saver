@@ -8,6 +8,7 @@ import TokyoHot from './makers/tokyo-hot'
 import Brazzers from './makers/brazzers'
 import Caribbean from './makers/caribbean'
 import SOD from './makers/sod'
+import MGS from './makers/mgstage'
 
 async function main() {
 	// 创建按钮
@@ -40,6 +41,7 @@ async function main() {
 			} catch (e) { }; break;
 			case 'www.caribbeancom.com': try { av = await Caribbean(url) } catch { }; break;
 			case 'ec.sod.co.jp': try { av = await SOD(url) } catch { }; break;
+			case 'www.mgstage.com': try { av = await MGS(url) } catch { }; break;
 		}
 	}
 
@@ -48,6 +50,7 @@ async function main() {
 			if (av) {
 				console.log('AV对象', av)
 				try {
+					a.download = 'test'
 					a.download = await final(av)
 					a.href = av.imgUrl
 				} catch (e) {
