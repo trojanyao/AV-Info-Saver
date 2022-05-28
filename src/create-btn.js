@@ -33,6 +33,7 @@ export function createBtn() {
     wrapper.style.zIndex = '99999';
     document.querySelector('body').appendChild(wrapper);
     // *** 下载按钮 ***
+    a.target = '_blank';
     a.style.display = 'flex';
     a.style.justifyContent = a.style.alignItems = 'center';
     a.style.width = a.style.height = '48px';
