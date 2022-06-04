@@ -8,7 +8,15 @@ module.exports = {
   source: repository.url,
   // 'license': 'MIT',
   match: [
-    'https://www.madonna-av.com/*',
+    // CA 集团厂商
+    'https://madonna-av.com/*',
+    'https://s1s1s1.com/*',
+    'https://moodyz.com/*',
+    'https://honnaka.jp/*',
+    'https://ideapocket.com/*',
+    'https://attackers.net/*',
+    'https://premium-beauty.com/*',
+    // 欧美
     'https://www.naughtyamerica.com/*',
     'https://www.1pondo.tv/*',
     'https://www.prestige-av.com/*',

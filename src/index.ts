@@ -1,6 +1,6 @@
 import { createBtn } from './create-btn'
 import { final } from './utils/final'
-import { Madonna } from './makers/madonna'
+import CA from './makers/ca_group'
 import { NA } from './makers/naughty-america'
 import { OnePondo } from './makers/1pondo'
 import Prestige from './makers/prestige'
@@ -15,12 +15,19 @@ async function main() {
 	let a = createBtn()
 
 	// 核心功能
-	let domain = document.domain, url = document.URL;
-	let av: any = {};
+	let domain = document.domain, url = document.URL, av: any = {}
 	console.log('域名', domain, url);
 	async function trySwitch() {
 		switch (domain) {
-			case 'www.madonna-av.com': av = Madonna(url); break;
+			// ----- CA 集团厂商 -----
+			case 'madonna-av.com':
+			case 's1s1s1.com':
+			case 'moodyz.com':
+			case 'honnaka.jp':
+			case 'ideapocket.com':
+			case 'attackers.net':
+			case 'premium-beauty.com':
+				av = await CA(url); break;
 			case 'www.naughtyamerica.com': try { av = await NA(url) } catch { }; break;
 			case 'www.1pondo.tv': try { av = await OnePondo(url) } catch { }; break;
 			case 'www.prestige-av.com': try { av = await Prestige(url) } catch { }; break;

@@ -4,10 +4,21 @@
 // @version     1.0.1
 // @author      TROJAN <ytj1996@sina.com>
 // @source
-// @match       https://www.madonna-av.com/*
+// @match       https://madonna-av.com/*
+// @match       https://s1s1s1.com/*
+// @match       https://moodyz.com/*
+// @match       https://honnaka.jp/*
+// @match       https://ideapocket.com/*
+// @match       https://attackers.net/*
+// @match       https://premium-beauty.com/*
 // @match       https://www.naughtyamerica.com/*
 // @match       https://www.1pondo.tv/*
 // @match       https://www.prestige-av.com/*
+// @match       https://my.tokyo-hot.com/*
+// @match       https://www.brazzers.com/*
+// @match       https://www.caribbeancom.com/*
+// @match       https://ec.sod.co.jp/*
+// @match       https://www.mgstage.com/*
 // @require     https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js
 // @require     https://cdn.jsdelivr.net/npm/axios@0.26.0/dist/axios.min.js
 // @require     https://cdn.jsdelivr.net/npm/axios-userscript-adapter@0.1.11/dist/axiosGmxhrAdapter.min.js
@@ -22,7 +33,7 @@
 /******/ 	"use strict";
 var __webpack_exports__ = {};
 
-;// CONCATENATED MODULE: ./src/create-btn.ts
+;// CONCATENATED MODULE: ./src/create-btn.js
 function createBtn() {
   // ----- 引用脚本 -----
   let iconify = document.createElement('script');
@@ -53,6 +64,7 @@ function createBtn() {
   wrapper.style.zIndex = '99999';
   document.querySelector('body').appendChild(wrapper); // *** 下载按钮 ***
 
+  a.target = '_blank';
   a.style.display = 'flex';
   a.style.justifyContent = a.style.alignItems = 'center';
   a.style.width = a.style.height = '48px';
@@ -75,6 +87,7 @@ function createBtn() {
   menuDiv.style.marginLeft = '10px';
   menuDiv.style.display = 'flex';
   menuDiv.style.flexDirection = 'column';
+  menuDiv.style.color = '#333333';
   menuDiv.style.fontFamily = '"PingFang SC", sans-serif'; // ** 标题 **
 
   titleDiv.id = 'title';
@@ -82,8 +95,8 @@ function createBtn() {
   titleDiv.style.fontSize = '18px';
   titleDiv.style.fontWeight = '600';
   menuDiv.appendChild(titleDiv); // ** 菜单 **
+  // toggleDiv.style.marginTop = '10px';
 
-  toggleDiv.style.marginTop = '10px';
   toggleDiv.style.width = document.querySelector('#title').offsetWidth;
   toggleDiv.style.display = 'flex';
   toggleDiv.style.flexDirection = 'row';
@@ -188,15 +201,18 @@ function datify(date) {
     let month = date.match(/(\d{1,2})月/)[1];
     let day = date.match(/(\d{1,2})日/)[1];
     newDate = `${year}.${month.length === 1 ? '0' + month : month}.${day.length === 1 ? '0' + day : day}`;
-  } // console.log('处理后的日期', newDate)
+  }
 
-
+  console.log('处理后的日期', newDate);
   return newDate;
 }
-;// CONCATENATED MODULE: ./src/utils/codify.ts
+;// CONCATENATED MODULE: ./src/utils/codify.js
 // 品番 标准化
 function codify(code) {
-  if (/[a-z,A-Z]/.test(code)) {
+  if (/n\d+/.test(code)) {
+    // 東京熱番号
+    return code;
+  } else if (/[a-z,A-Z]/.test(code)) {
     // 有字母的番号
     // 番号数字位
     let codeNum = code.match(/\d+/);
@@ -216,58 +232,137 @@ function codify(code) {
 }
 ;// CONCATENATED MODULE: ./src/utils/final.js
 
- // 拼接最后文件名
 
-async function final_final(av) {
+const DIGIT_TYPE = ['vol', 'Vol', 'Case', 'FILE'];
+const DIGIT_FIRST_SERIES = ['ラグジュTV']; // 拼接最后文件名
+
+async function final_final(avObj) {
+  // 深拷贝
+  let av = JSON.parse(JSON.stringify(avObj));
   let finalName;
-  console.log('传入的 AV 对象', av); // ***** 处理标题 *****
-  // 去末尾演员名
-
-  let endAct = new RegExp(av.actress[0] + '$', 'g');
-
-  if (endAct.test(av.workName)) {
-    av.workName = av.workName.replace(av.actress[0], '');
-  } // 头尾去空格
-
-
-  av.workName = av.workName.trim();
+  console.log('传入的 AV 对象', av);
 
   if (av.code) {
     // ---------- 日本作品，有番号 ----------
-    // 处理演员列表（拼接）
-    av.actress.map(a => {
-      a = a.trim().replace(' ', '');
-    });
-    av.actress = av.actress.join(' ');
+    // ***** 处理演员列表 *****
+    {
+      av.actress = av.actress.map(a => {
+        // 先剔除头尾空格
+        let newA = a.trim();
+
+        if (!newA.match(/[a-zA-Z]+/g)) {
+          // 仅作用于非英文演员、非素人演员：剔除内部空格
+          if (!av.actressRealName) {
+            newA = newA.replaceAll(/\s/g, '');
+          }
+        }
+
+        return newA;
+      });
+      console.log('去空格后的演员列表', av.actress);
+      av.actress = av.actress.join(' ');
+    } // ***** 处理标题 *****
+
+    {
+      // 去头尾演员名
+      let startAct = new RegExp('^' + av.actress, 'g');
+      let endAct = new RegExp(av.actress + '$', 'g');
+      let temp = startAct.test(av.workName) || endAct.test(av.workName);
+      console.log('头尾是否包含演员名', temp);
+
+      if (temp) {
+        console.log('演员名字符串', av.actress);
+        av.workName = av.workName.replace(av.actress, '');
+      } // 头尾去空格
+
+
+      av.workName = av.workName.trim();
+      console.log('去头尾演员名后的标题', av.workName);
+    }
 
     if (av && av.seriesName) {
-      // *** 系列作品 ***
-      let subName; // 除系列名外剩下的名称
+      var _av$workName;
 
-      if (av.workName.includes('vol')) {
-        // if (av.workName.includes(av.seriesName.trim())) {
-        // 作品名包含系列名
-        finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.workName.replace(av.seriesName, '').trim()}（${codify(av.code)}）${av.actress}${av.duration ? ` [${av.duration}]` : ``}.jpg`; // } else if (!av.workName.includes(av.seriesName.trim())) {
-        //     // 作品名不含系列名
-        //     finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`
-        // }
-      } else {
-        if (av.workName.includes(av.seriesName.trim())) {
-          // 作品名包含系列名
-          finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName.replace(av.seriesName, '').trim()}${av.duration ? ` [${av.duration}]` : ``}.jpg`;
-        } else if (!av.workName.includes(av.seriesName.trim())) {
-          // 作品名不含系列名
-          finalName = `【${av.makerName}】${av.seriesName}（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.duration ? `[${av.duration}]` : ``}.jpg`;
+      console.log('***** 系列作品 *****');
+      av.seriesName = av.seriesName.trim();
+      /* 包含编号：检测作品名是否包含编号 */
+      // 是否包含编号标识
+
+      let hasIndicator = DIGIT_TYPE.findIndex(d => av.workName.includes(d));
+      console.log('编号标识数组位置', hasIndicator); // 标识类型
+
+      let indicator = DIGIT_TYPE[hasIndicator];
+      console.log('编号标识', indicator); // 是否包含纯数字
+
+      let hasDigit = /\d+/.test(av.workName);
+      console.log('是否有纯数字', hasDigit);
+      let hasNum = hasIndicator !== -1 || hasDigit;
+      console.log('作品名是否包含编号', hasNum);
+      /* 不含编号：检测作品名前缀（空格之前的内容）和系列名的关系 */
+
+      let workPrefix = (_av$workName = av.workName) === null || _av$workName === void 0 ? void 0 : _av$workName.match(/^(\S+)\s+(\S+)/);
+      console.log('作品名前缀', workPrefix === null || workPrefix === void 0 ? void 0 : workPrefix[1]); // 判断作品名前缀和系列名之间的关系
+      // 作品名包含系列名
+
+      let workHasSeries = workPrefix !== null && workPrefix !== void 0 && workPrefix[0] ? workPrefix[1].trim().replaceAll(' ', '').includes(av.seriesName) : false;
+      console.log('作品名前缀中包含系列名', workHasSeries); // 系列名是否包含作品名
+
+      let seriesHasWork = av.seriesName.includes(workPrefix === null || workPrefix === void 0 ? void 0 : workPrefix[1].trim().replaceAll(' ', ''));
+      console.log('系列名中包含作品名前缀', seriesHasWork);
+      /* 作品名前缀包含系列名，或系列名包含作品名前缀，说明作品名包含系列名 */
+
+      if (hasNum) {
+        var _av$workName$match, _av$workName$match2;
+
+        // ----- 作品名包含系列名（含编号）-----
+        // 格式：系列名（日期）编号 演员名（）
+        // 纯数字部分
+        let digitTypeB = (_av$workName$match = av.workName.match(/\d+/)) === null || _av$workName$match === void 0 ? void 0 : _av$workName$match[0];
+        console.log('纯数字部分', digitTypeB); // 标识符和编号部分
+
+        let digitTypeA = (_av$workName$match2 = av.workName.match(new RegExp(indicator + '[\\S\\s]*' + digitTypeB))) === null || _av$workName$match2 === void 0 ? void 0 : _av$workName$match2[0];
+        console.log('标识符和编号部分', digitTypeA); // 编号部分
+
+        let num = digitTypeA ?? digitTypeB;
+        console.log('编号部分', num); // 为了名称简单，不再显示剩余部分
+        // let suffix = av.workName.match(new RegExp(num + '\\s*([\\S\\s]+)$'))?.[1]
+
+        let digitFirstSeries = DIGIT_FIRST_SERIES.find(x => av.seriesName === x);
+        console.log('是否属于编号在前日期在后的特殊系列', digitFirstSeries);
+
+        if (digitFirstSeries) {
+          finalName = `${av.seriesName} ${num}（${datify(av.date)}）${av.actress}（${av.code}）${av.actressRealName ?? ''}`;
+        } else {
+          finalName = `${av.seriesName}（${datify(av.date)}）${num}（${av.code}）${av.actress}`;
         }
+
+        console.log('有编号的作品剩余部分', finalName);
+      } else if (workHasSeries || seriesHasWork) {
+        // ----- 作品名包含系列名（不含编号）-----
+        // 格式：系列名（日期）演员名（番号）作品名剩余部分
+        // 剩余部分 = 作品名剔除前缀
+        let suffix = workPrefix === null || workPrefix === void 0 ? void 0 : workPrefix[2];
+        finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`;
+        console.log('作品名包含系列名（不含编号）', finalName);
+      } else {
+        // --- 作品名不含系列名 ---
+        // 格式：系列名（日期）演员名（番号）作品名剩余部分
+        // 剩余部分 = 原始作品名
+        let suffix = av.workName;
+        finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`;
       }
     } else {
-      // *** 单体作品 ***
-      finalName = `【${av.makerName}】（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}${av.duration ? ` [${av.duration}]` : ``}.jpg`;
+      console.log('***** 单体作品 *****'); //（日期）演员（番号）作品名
+
+      finalName = `（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}`;
+      console.log('单体作品', finalName);
     }
+
+    finalName = `【${av.makerName}】${finalName}${av.duration ? av.resolution ? ` [${av.duration}; ${av.resolution}]` : ` [${av.duration}]` : ''}.jpg`;
   } else {
     // ---------- 欧美作品，无番号 ----------
     // 替换半角冒号
-    av.workName = av.workName.includes(': ') ? av.workName.replace(': ', '-') : av.workName;
+    av.workName = av.workName.replace(': ', '-');
     let newActress = [];
 
     for (let a of av.actress) {
@@ -275,16 +370,17 @@ async function final_final(av) {
     }
 
     console.log('修改后的演员列表', newActress);
-    finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(', ')} - ${av.workName} [${av.duration}; ${av.resolution.join(', ')}].jpg`;
+    finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(', ')} - ${av.workName}${av.duration ? `[${av.duration}; ${av.resolution.join(', ')}]` : ''}.jpg`;
   }
 
   console.log('最后拼接的文件名', finalName);
   return finalName;
 }
-;// CONCATENATED MODULE: ./src/makers/madonna.js
+;// CONCATENATED MODULE: ./src/makers/ca_group.js
 
-function Madonna(url) {
-  // 定义页面元素
+function CA(url) {
+  console.log('传入 URL', url); // 定义页面元素
+
   let workName,
       seriesName,
       date,
@@ -292,12 +388,12 @@ function Madonna(url) {
       code,
       imgUrl; // 仅在作品页生效
 
-  if (url.includes('https://www.madonna-av.com/works/detail/')) {
-    // 页面数据列表
-    let infoList = document.querySelectorAll('.works-detail-info > li');
-    console.log('数据列表', infoList); // 作品名
+  if (url.includes('detail')) {
+    // 作品名
+    workName = document.querySelector('.page-main-title-tx').innerHTML; // 页面数据列表
 
-    workName = document.querySelector('.page-main-title-tx').innerHTML; // 系列名
+    let infoList = document.querySelectorAll('.works-detail-info > li');
+    console.log('数据列表', infoList); // 系列名
 
     seriesName = infoList[4].querySelector('a') ? infoList[4].querySelector('a').innerHTML : undefined; // 日期
 
@@ -360,7 +456,9 @@ async function NA(url) {
     try {
       const blob = await res.blob();
       imgUrl = window.URL.createObjectURL(blob);
-    } catch (e) {} // 时长
+    } catch (e) {
+      console.log('下载图片失败', e);
+    } // 时长
 
 
     duration = infoList.querySelector('.duration').innerText.match(/\d+\ min/g)[0].replace(' ', '');
@@ -477,9 +575,10 @@ async function Prestige(url) {
     // let aList = infoList[1].querySelectorAll('.spec-content > span')
     // aList.forEach(a => actress.push(a.innerText.trim()))
 
-    actress[0] = infoList[0].innerText.trim(); // 番号
+    actress[0] = infoList[0].innerText;
+    console.log('演员列表', actress); // 番号
 
-    code = infoList[4].innerText;
+    code = infoList[4].innerText.replace('TKT', '');
     let codeCap = (_code$match = code.match(/[a-z,A-Z]+/)) === null || _code$match === void 0 ? void 0 : _code$match[0].toLowerCase();
     let codeNum = (_code$match2 = code.match(/[0-9]+/)) === null || _code$match2 === void 0 ? void 0 : _code$match2[0];
     console.log('番号', codeCap, codeNum); // 封面地址
@@ -501,10 +600,394 @@ async function Prestige(url) {
     return av;
   }
 }
+;// CONCATENATED MODULE: ./src/makers/tokyo-hot.js
+// 厂商名转换列表
+const seriesList = ['Wカン', '東熱激情 淫乱女教師中出授業 特集'];
+async function TokyoHot(url) {
+  // 定义页面元素
+  let makerName,
+      workName,
+      seriesName,
+      date,
+      actress = [],
+      code,
+      imgUrl,
+      duration; // 仅在作品页生效
+
+  if (url.includes('https://my.tokyo-hot.com/product/')) {
+    var _url$match, _url$match2, _sizeInfo$querySelect, _sizeInfo$querySelect2, _sizeInfo$querySelect3;
+
+    // 作品信息列表
+    let keyList = document.querySelectorAll('dl.info > dt');
+    let infoList = document.querySelectorAll('dl.info > dd'); // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+
+    keyList = Array.from(keyList);
+    console.log('数据列表', infoList); // 作品名
+
+    workName = document.querySelector('.contents > h2').innerText;
+    console.log('作品名', workName); // 系列名
+
+    for (let series of seriesList) {
+      let reg = new RegExp(series, 'g');
+
+      if (reg.test(workName)) {
+        console.log('系列名', series);
+        seriesName = series;
+        break;
+      }
+    } // 日期
+
+
+    let dateIndex = keyList.findIndex(key => key.innerText.includes('配信開始日'));
+    date = infoList[dateIndex].innerText;
+    console.log('日期索引', dateIndex, '日期', date); // 演员列表
+
+    let aList = infoList[0].querySelectorAll('a');
+    aList.forEach(a => actress.push(a.innerText.trim()));
+    console.log('演员列表', aList, actress); // 番号
+
+    let codeIndex = keyList.findIndex(key => key.innerText.includes('作品番号'));
+    code = infoList[codeIndex].innerText;
+    console.log('番号', codeIndex, code); // 封面地址
+
+    let pdNum = ((_url$match = url.match(/n\d+/g)) === null || _url$match === void 0 ? void 0 : _url$match[0]) || ((_url$match2 = url.match(/\d+/g)) === null || _url$match2 === void 0 ? void 0 : _url$match2[0]);
+    imgUrl = `https://my.cdn.tokyo-hot.com/media/${pdNum}/jacket/${code}.jpg`;
+    console.log('封面原始地址', imgUrl);
+    const res = await fetch(imgUrl);
+
+    try {
+      const blob = await res.blob();
+      imgUrl = window.URL.createObjectURL(blob);
+    } catch (e) {} // 时长
+
+
+    let durIndex = keyList.findIndex(key => key.innerText.includes('収録時間'));
+    duration = infoList[durIndex].innerText.replaceAll(':', '.');
+    console.log('时长', durIndex, duration); // 清晰度和大小
+
+    let sizeInfo = document.querySelectorAll('.download')[1].querySelector('.dbox');
+    let format = (_sizeInfo$querySelect = sizeInfo.querySelector('h4').innerText.match(/MP4|WMV/g)) === null || _sizeInfo$querySelect === void 0 ? void 0 : _sizeInfo$querySelect[0];
+    let size = (_sizeInfo$querySelect2 = sizeInfo.querySelector('h4').innerText.match(/\d+.\d+/g)) === null || _sizeInfo$querySelect2 === void 0 ? void 0 : _sizeInfo$querySelect2[0];
+    let resolution = (_sizeInfo$querySelect3 = sizeInfo.querySelector('p').innerText.match(/x(\d+)/)) === null || _sizeInfo$querySelect3 === void 0 ? void 0 : _sizeInfo$querySelect3[1];
+    console.log('大小', '格式', parseFloat(size).toFixed(1), format, resolution);
+    resolution = `${parseFloat(size).toFixed(1)}GB-${format}-${resolution}p`;
+    let av = {
+      makerName: '東京熱',
+      workName: workName,
+      seriesName: seriesName,
+      date: date,
+      actress: actress,
+      code: code,
+      imgUrl: imgUrl,
+      duration: duration,
+      resolution: resolution
+    };
+    console.log('TokyoHot AV 对象', av);
+    return av;
+  }
+}
+;// CONCATENATED MODULE: ./src/makers/brazzers.js
+async function Brazzers(url) {
+  // 定义页面元素
+  let workName,
+      seriesName,
+      date,
+      actress = [],
+      code,
+      imgUrl,
+      duration,
+      resolution;
+  console.log('传入的链接', url, '页面状态', document.readyState); // setTimeout(async () => {
+  // 仅在作品页生效
+
+  if (url.includes('https://www.brazzers.com/video/')) {
+    var _imgUrl$match;
+
+    // 页面数据列表
+    let info = document.querySelector('#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div > div'); // let keyList = document.querySelectorAll('dl.info > dt')
+    // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+    // keyList = Array.from(keyList)
+
+    console.log('数据区域', info); // 作品名
+
+    workName = info.querySelector('h2').innerText;
+    console.log('作品名', workName); // 系列名
+    // seriesName = 
+    // console.log('系列名', seriesName)
+    // 日期
+
+    date = new Date(document.querySelector('h2').previousElementSibling.innerText).toLocaleDateString('zh-CN');
+    console.log('日期', date); // 演员列表
+
+    let aList = document.querySelectorAll('h2 + div > span');
+    aList.forEach(a => actress.push(a.innerText.replace(', ', '')));
+    console.log('演员列表', actress); // 番号
+    // code = 
+    // code = codify(code)
+
+    console.log('番号', code); // 封面地址
+
+    imgUrl = document.querySelector('video + div').style['background-image'];
+    imgUrl = (_imgUrl$match = imgUrl.match(/"(\S+)"/)) === null || _imgUrl$match === void 0 ? void 0 : _imgUrl$match[1]; // 跨域获取
+
+    const res = await fetch(imgUrl);
+
+    try {
+      const blob = await res.blob();
+      imgUrl = window.URL.createObjectURL(blob);
+    } catch (e) {
+      console.log('下载图片失败', e);
+    }
+
+    console.log('封面地址', imgUrl); // 时长
+    // duration = 
+
+    console.log('时长', duration); // 清晰度和大小
+    // resolution = 
+
+    console.log('清晰度', resolution);
+    console.log('大小', '格式');
+    let av = {
+      makerName: 'Brazzers',
+      workName: workName,
+      seriesName: seriesName,
+      date: date,
+      actress: actress,
+      code: code,
+      imgUrl: imgUrl,
+      duration: duration,
+      resolution: resolution
+    };
+    console.log('传出 AV 对象', av);
+    return av;
+  } // }, 2000)
+
+}
+;// CONCATENATED MODULE: ./src/makers/caribbean.js
+async function Caribbean(url) {
+  // 定义页面元素
+  let workName,
+      seriesName,
+      date,
+      actress = [],
+      code,
+      imgUrl,
+      duration,
+      resolution; // 仅在作品页生效
+
+  if (url.includes('https://www.caribbeancom.com/moviepages/')) {
+    var _url$match;
+
+    // 页面数据列表
+    let infoList = document.querySelectorAll('.movie-info > ul > li'); // let keyList = document.querySelectorAll('dl.info > dt')
+    // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+    // keyList = Array.from(keyList)
+
+    console.log('数据列表', infoList); // 作品名
+
+    workName = document.querySelector('.heading > h1').innerText;
+    console.log('作品名', workName); // 系列名
+
+    seriesName = infoList[3].querySelector('span').innerText === 'シリーズ' ? infoList[3].querySelector('span:last-child').innerText : undefined;
+    console.log('系列名', seriesName); // 日期
+
+    date = infoList[1].querySelector('span:last-child').innerText;
+    console.log('日期', date); // 演员列表
+
+    let aList = infoList[0].querySelectorAll('a');
+    aList.forEach(a => actress.push(a.innerText));
+    console.log('演员列表', actress); // 番号
+
+    code = (_url$match = url.match(/\d{6}-\d{3}/g)) === null || _url$match === void 0 ? void 0 : _url$match[0];
+    console.log('番号', code); // 封面地址
+
+    imgUrl = document.querySelector('.vjs-poster').style.backgroundImage;
+    imgUrl = `https://www.caribbeancom.com${imgUrl.replace('url("', '').replace('")', '')}`; // 跨域获取
+    // const res = await fetch(imgUrl)
+    // try {
+    //     const blob = await res.blob()
+    //     imgUrl = window.URL.createObjectURL(blob)
+    // } catch (e) {
+    //     console.log('下载图片失败', e)
+    // }
+
+    console.log('封面地址', imgUrl); // 时长
+
+    duration = infoList[2].querySelector('span:last-child').innerText;
+    duration = duration.replace(/^00:/, '').replaceAll(':', '.');
+    console.log('时长', duration); // 清晰度和大小
+    // resolution = 
+
+    console.log('清晰度', resolution);
+    console.log('大小', '格式');
+    let av = {
+      makerName: '加勒比',
+      workName: workName,
+      seriesName: seriesName,
+      date: date,
+      actress: actress,
+      code: code,
+      imgUrl: imgUrl,
+      duration: duration,
+      resolution: resolution
+    };
+    console.log('传出 AV 对象', av);
+    return av;
+  }
+}
+;// CONCATENATED MODULE: ./src/makers/sod.js
+async function SOD(url) {
+  console.log('作品页链接', url); // 定义页面元素
+
+  let workName,
+      seriesName,
+      date,
+      actress = [],
+      code,
+      imgUrl,
+      duration,
+      resolution; // 仅在作品页生效
+
+  if (url.includes('https://ec.sod.co.jp/prime/videos/')) {
+    // 作品名
+    workName = document.querySelector('#videos_head > h1 + h1').innerText;
+    console.log('作品名', workName); // 页面数据列表
+
+    let infoList = document.querySelectorAll('#v_introduction tr > td:last-child'); // let keyList = document.querySelectorAll('dl.info > dt')
+    // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+    // keyList = Array.from(keyList)
+
+    console.log('数据列表', infoList); // 系列名
+
+    seriesName = infoList[2].innerText;
+    console.log('系列名', seriesName); // 日期
+
+    date = infoList[1].innerText.replaceAll(' ', '');
+    console.log('日期', date); // 演员列表
+
+    let aList = infoList[4].querySelectorAll('a');
+    aList.forEach(a => actress.push(a.innerText));
+    console.log('演员列表', actress); // 番号
+
+    code = infoList[0].innerText;
+    console.log('番号', code); // 封面地址
+
+    imgUrl = document.querySelector('.videos_samimg > a').href.replace('http:', 'https:'); // 跨域获取
+
+    const res = await fetch(imgUrl);
+
+    try {
+      const blob = await res.blob();
+      imgUrl = window.URL.createObjectURL(blob);
+    } catch (e) {
+      console.log('下载图片失败', e);
+    }
+
+    console.log('封面地址', imgUrl); // 时长
+    // duration = 
+
+    console.log('时长', duration); // 清晰度和大小
+    // resolution = 
+
+    console.log('清晰度', resolution);
+    console.log('大小', '格式');
+    let av = {
+      makerName: 'SODクリエイト',
+      workName: workName,
+      seriesName: seriesName,
+      date: date,
+      actress: actress,
+      code: code,
+      imgUrl: imgUrl,
+      duration: duration,
+      resolution: resolution
+    };
+    console.log('传出 AV 对象', av);
+    return av;
+  }
+}
+;// CONCATENATED MODULE: ./src/makers/mgstage.js
+// 厂商名转换列表
+const MAKER_TRANS = {};
+async function MGS(url) {
+  // 定义页面元素
+  let makerName,
+      workName,
+      seriesName,
+      date,
+      actress = [],
+      code,
+      imgUrl,
+      duration; // 仅在作品页生效
+
+  if (url.includes('https://www.mgstage.com/product/product_detail/')) {
+    // 作品名
+    workName = document.querySelector('.common_detail_cover h1').innerText;
+    console.log('作品名', workName); // 作品信息列表
+
+    let keyList = document.querySelectorAll('.detail_data > table:last-child th');
+    let valueList = document.querySelectorAll('.detail_data > table:last-child td'); // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+
+    keyList = [...keyList].map(key => {
+      return key.innerText;
+    });
+    console.log('数据列表', keyList, valueList); // 厂商名
+
+    makerName = MAKER_TRANS[valueList[1].innerText] ?? valueList[1].innerText;
+    console.log('厂商名', makerName); // 系列名
+
+    seriesName = valueList[6].innerText; // 如果包含系列字段，说明有系列名称
+
+    console.log('系列名', seriesName); // 日期
+
+    date = valueList[4].innerText;
+    console.log('日期', date); // 演员列表
+    // let aList = infoList[1].querySelectorAll('.spec-content > span')
+    // aList.forEach(a => actress.push(a.innerText.trim()))
+
+    actress[0] = valueList[0].innerText;
+    console.log('演员列表', actress); // 番号
+
+    code = valueList[3].innerText; // let codeCap = code.match(/[a-z,A-Z]+/)?.[0].toLowerCase()
+    // let codeNum = code.match(/[0-9]+/)?.[0]
+
+    console.log('番号', code); // 封面地址
+
+    imgUrl = document.querySelector('.detail_photo h2 img').src.replace('pf_o1', 'pb_e');
+    const res = await fetch(imgUrl);
+
+    try {
+      const blob = await res.blob();
+      imgUrl = window.URL.createObjectURL(blob);
+    } catch (e) {
+      console.log('下载图片失败', e);
+    }
+
+    console.log('封面地址', imgUrl); // 时长
+
+    duration = valueList[2].innerText;
+    console.log('时长', duration);
+    let av = {
+      makerName: makerName,
+      workName: workName,
+      seriesName: seriesName,
+      date: date,
+      actress: actress,
+      actressRealName: 'xxx',
+      code: code,
+      imgUrl: imgUrl,
+      duration: duration
+    };
+    console.log('MGS AV 对象', av);
+    return av;
+  }
+}
 ;// CONCATENATED MODULE: ./src/index.ts
-// import { get } from './utils'
-// import './style/main.less'
-// import { add } from './example'
+
+
+
+
+
 
 
 
@@ -523,14 +1006,21 @@ async function main() {
 
   async function trySwitch() {
     switch (domain) {
+      // ----- CA 集团厂商 -----
       case 'www.madonna-av.com':
-        av = Madonna(url);
+      case 'www.s1s1s1.com':
+      case 'www.moodyz.com':
+      case 'www.honnaka.jp':
+      case 'www.ideapocket.com':
+      case 'www.attackers.net':
+      case 'www.premium-beauty.com':
+        av = CA(url);
         break;
 
       case 'www.naughtyamerica.com':
         try {
           av = await NA(url);
-        } catch (e) {}
+        } catch {}
 
         ;
         break;
@@ -538,7 +1028,7 @@ async function main() {
       case 'www.1pondo.tv':
         try {
           av = await OnePondo(url);
-        } catch (e) {}
+        } catch {}
 
         ;
         break;
@@ -546,32 +1036,85 @@ async function main() {
       case 'www.prestige-av.com':
         try {
           av = await Prestige(url);
+        } catch {}
+
+        ;
+        break;
+
+      case 'my.tokyo-hot.com':
+        try {
+          av = await TokyoHot(url);
+        } catch {}
+
+        ;
+        break;
+
+      case 'www.brazzers.com':
+        try {
+          setTimeout(async () => {
+            av = await Brazzers(url);
+
+            if (av) {
+              console.log('AV对象', av);
+
+              try {
+                a.download = await final_final(av);
+                a.href = av.imgUrl;
+              } catch (e) {}
+            }
+          }, 2000);
         } catch (e) {}
+
+        ;
+        break;
+
+      case 'www.caribbeancom.com':
+        try {
+          av = await Caribbean(url);
+        } catch {}
+
+        ;
+        break;
+
+      case 'ec.sod.co.jp':
+        try {
+          av = await SOD(url);
+        } catch {}
+
+        ;
+        break;
+
+      case 'www.mgstage.com':
+        try {
+          av = await MGS(url);
+        } catch {}
 
         ;
         break;
     }
   }
 
-  await trySwitch();
+  trySwitch().then(async () => {
+    if (av) {
+      console.log('AV对象', av);
 
-  if (av) {
-    console.log('AV对象', av);
-
-    try {
-      a.download = await final_final(av);
-      a.href = av.imgUrl;
-    } catch (e) {}
-  } // if (autoSave === 'yes') {
+      try {
+        a.download = 'test';
+        a.download = await final_final(av);
+        a.href = av.imgUrl;
+      } catch (e) {}
+    }
+  }); // if (autoSave === 'yes') {
   // 	a.click();
   // }
-
 }
 
-window.onload = () => {
-  main().catch(e => {
+window.onload = async () => {
+  try {
+    await main();
+  } catch (e) {
     console.log(e);
-  });
+  }
 };
 /******/ })()
 ;
