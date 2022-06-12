@@ -25,8 +25,9 @@ export default async function MGS(url) {
         console.log('厂商名', makerName)
 
         // 系列名
-        seriesName = valueList[6].innerText  // 如果包含系列字段，说明有系列名称
-        console.log('系列名', seriesName)
+        let seriesIndex = keyList.findIndex(key => key === 'シリーズ：')
+        seriesName = valueList[seriesIndex].innerText  // 如果包含系列字段，说明有系列名称
+        console.log('系列名', seriesIndex, seriesName)
 
         // 日期
         date = valueList[4].innerText

@@ -5,6 +5,7 @@ const DIGIT_TYPE = [
     'Vol',
     'Case',
     'FILE',
+    'Talk',
 ]
 const DIGIT_FIRST_SERIES = [
     'ラグジュTV'
