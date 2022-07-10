@@ -27,6 +27,7 @@ async function main() {
 			case 'ideapocket.com':
 			case 'attackers.net':
 			case 'premium-beauty.com':
+			case 'mvg.jp':
 				av = await CA(url); break;
 			case 'www.naughtyamerica.com': try { av = await NA(url) } catch { }; break;
 			case 'www.1pondo.tv': try { av = await OnePondo(url) } catch { }; break;

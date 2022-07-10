@@ -2,6 +2,7 @@
 const INDICATORS = [
     'vol',
     'Vol',
+    'VOL',
     'Case',
     'FILE',
     'Talk',
