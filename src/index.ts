@@ -58,19 +58,20 @@ async function main() {
 			if (av) {
 				console.log('AV对象', av)
 				try {
-					a.download = 'test'
 					a.download = await final(av)
 					a.href = av.imgUrl
+					
+					console.log('自动保存开关', localStorage.getItem('autoSave'))
+					if (localStorage.getItem('autoSave') === 'yes') {
+						console.log('自动保存')
+						a.click();
+					}
 				} catch (e) {
 
 				}
 			}
 		}
 	)
-
-	// if (autoSave === 'yes') {
-	// 	a.click();
-	// }
 
 }
 
