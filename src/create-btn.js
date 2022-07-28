@@ -78,8 +78,9 @@ export function createBtn() {
 	toggleDiv.appendChild(toggleText);
 	// 菜单按钮
 	toggleBtn.style.width = '36px';
-	toggleBtn.style.height = '18px';
+	toggleBtn.style.height = '20px';
 	toggleBtn.style.borderRadius = '18px';
+	toggleBtn.style.position = 'relative';
 	if (autoSave === 'yes') {
 		toggleBtn.style.background = 'linear-gradient(90deg, #1E93FF 0%, #1C8CF2 100%)';
 		toggleBtn.style.boxShadow = 'inset -5px -5px 10px rgba(31, 154, 255, 0.9), inset 5px -5px 10px rgba(25, 126, 218, 0.2), inset -5px 5px 10px rgba(25, 126, 218, 0.2)';
@@ -98,7 +99,7 @@ export function createBtn() {
 	btn.style.borderRadius = '50%';
 	btn.style.background = '#F3F3F3';
 	if (autoSave === 'yes') {
-		btn.style.left = '18px';
+		btn.style.right = '0';
 		btn.style.boxShadow = '5px 5px 13px rgba(219, 219, 219, 0.9), 5px -5px 10px rgba(219, 219, 219, 0.2), -5px 5px 10px rgba(12, 72, 128, 0.2), inset -1px -1px 2px rgba(219, 219, 219, 0.5), inset 1px 1px 2px rgba(255, 255, 255, 0.3)';
 	} else if (!autoSave === 'no') {
 		btn.style.left = '0';
@@ -120,7 +121,7 @@ export function createBtn() {
 		if (!localStorage.getItem('autoSave') || localStorage.getItem('autoSave') === 'no') {
 			toggleBtn.style.background = 'linear-gradient(90deg, #1E93FF 0%, #1C8CF2 100%)';
 			toggleBtn.style.boxShadow = 'inset -5px -5px 10px rgba(31, 154, 255, 0.9), inset 5px -5px 10px rgba(25, 126, 218, 0.2), inset -5px 5px 10px rgba(25, 126, 218, 0.2)';
-			btn.style.left = '18px';
+			btn.style.left = '16px';
 			btn.style.boxShadow = '5px 5px 13px rgba(219, 219, 219, 0.9), 5px -5px 10px rgba(219, 219, 219, 0.2), -5px 5px 10px rgba(12, 72, 128, 0.2), inset -1px -1px 2px rgba(219, 219, 219, 0.5), inset 1px 1px 2px rgba(255, 255, 255, 0.3)';
 			localStorage.setItem('autoSave', 'yes');
 			console.log('点击按钮')
