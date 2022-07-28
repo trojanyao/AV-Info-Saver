@@ -11,10 +11,11 @@
 // @match       https://ideapocket.com/*
 // @match       https://attackers.net/*
 // @match       https://premium-beauty.com/*
+// @match       https://mvg.jp/*
 // @match       https://www.naughtyamerica.com/*
 // @match       https://www.1pondo.tv/*
 // @match       https://www.prestige-av.com/*
-// @match       https://my.tokyo-hot.com/*
+// @match       https://*.tokyo-hot.com/*
 // @match       https://www.brazzers.com/*
 // @match       https://www.caribbeancom.com/*
 // @match       https://ec.sod.co.jp/*
@@ -209,8 +210,13 @@ function datify(date) {
 ;// CONCATENATED MODULE: ./src/utils/codify.js
 // 品番 标准化
 function codify(code) {
+  console.log('处理前番号', code);
+
   if (/n\d+/.test(code)) {
     // 東京熱番号
+    return code;
+  } else if (/-/.test(code)) {
+    // 包含连字符的番号无需处理
     return code;
   } else if (/[a-z,A-Z]/.test(code)) {
     // 有字母的番号
@@ -230,10 +236,112 @@ function codify(code) {
     return code;
   }
 }
+;// CONCATENATED MODULE: ./src/utils/refine-title.js
+function refineTitle(av) {
+  // 去头尾演员名
+  let startAct = new RegExp('^' + av.actress, 'g');
+  let endAct = new RegExp(av.actress + '$', 'g');
+  let temp = startAct.test(av.workName) || endAct.test(av.workName);
+  console.log('头尾是否包含演员名', temp);
+
+  if (temp) {
+    console.log('演员名字符串', av.actress);
+    av.workName = av.workName.replace(av.actress, '');
+  } // 头尾去空格
+
+
+  av.workName = av.workName.trim();
+  console.log('去头尾演员名后的标题', av.workName);
+  return av;
+}
+;// CONCATENATED MODULE: ./src/utils/refine-actress.js
+function refineActress(av) {
+  av.actress = av.actress.map(a => {
+    // 先剔除头尾空格
+    let newA = a.trim();
+
+    if (!newA.match(/[a-zA-Z]+/g)) {
+      // 仅作用于非英文演员、非素人演员：剔除内部空格
+      if (!av.actressRealName) {
+        newA = newA.replaceAll(/\s/g, '');
+      }
+    }
+
+    return newA;
+  });
+  console.log('去空格后的演员列表', av.actress);
+  av.actress = av.actress.join(' ');
+  return av;
+}
+;// CONCATENATED MODULE: ./src/utils/check-indicator.js
+// 编号标识列表
+const INDICATORS = ['vol', 'Vol', 'VOL', 'Case', 'FILE', 'Talk']; // 检测是否包含编号标识
+
+function checkIndicator(workName) {
+  console.log('传入的作品名', workName); // 是否包含编号标识
+
+  let indicatorIndex = INDICATORS.findIndex(d => workName.includes(d));
+  console.log('编号标识数组位置', indicatorIndex);
+
+  if (indicatorIndex > -1) {
+    var _workName$match;
+
+    // 包含编号标识：返回标识和编号部分
+    // 标识类型
+    let indicator = INDICATORS[indicatorIndex];
+    console.log('编号标识', indicator); // 标识符和编号部分
+
+    let num = (_workName$match = workName.match(new RegExp(indicator + '[\\S\\s]*\\d+'))) === null || _workName$match === void 0 ? void 0 : _workName$match[0];
+    console.log('标识符和编号部分', num);
+    return num;
+  } else {
+    // 不包含编号标识：返回 undefined
+    return undefined;
+  }
+}
+;// CONCATENATED MODULE: ./src/utils/check-digit.js
+// 检测是否包含纯数字
+function checkDigit(workName, seriesName) {
+  // 有纯数字编号也肯定是在标题中的系列名后跟着纯数字，所以先提取出后面跟着纯数字的子字符串的多种可能
+  let matches = workName.matchAll(/\s*(?<substr>\S+)\d+/g);
+  let subStrs = [];
+
+  for (let match of matches) {
+    let substr = match.groups.substr.replace(/\d/g, '');
+    subStrs.push(substr);
+  }
+
+  console.log('########## 后面有数字的子字符串 ##########', subStrs); // 然后和系列名比对，查找出真正和系列名相关的子字符串
+
+  let trueStr = subStrs.filter(substr => {
+    if (substr.includes(seriesName) || seriesName.includes(substr)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  console.log('真正的子串', trueStr);
+
+  if (trueStr.length > 0) {
+    var _workName$match;
+
+    // 符合条件的字串数 > 0：包含纯数字
+    // 查找纯数字
+    let num = (_workName$match = workName.match(new RegExp(trueStr[0] + '\\s*(\\d+)'))) === null || _workName$match === void 0 ? void 0 : _workName$match[1];
+    console.log('纯数字编号', num);
+    return num;
+  } else {
+    // 符合条件的字串数 <= 0：不包含纯数字
+    return undefined;
+  }
+}
 ;// CONCATENATED MODULE: ./src/utils/final.js
 
 
-const DIGIT_TYPE = ['vol', 'Vol', 'Case', 'FILE'];
+
+
+
+
 const DIGIT_FIRST_SERIES = ['ラグジュTV']; // 拼接最后文件名
 
 async function final_final(avObj) {
@@ -244,113 +352,48 @@ async function final_final(avObj) {
 
   if (av.code) {
     // ---------- 日本作品，有番号 ----------
-    // ***** 处理演员列表 *****
-    {
-      av.actress = av.actress.map(a => {
-        // 先剔除头尾空格
-        let newA = a.trim();
+    // ----- 处理演员名 -----
+    av = refineActress(av); // ----- 处理标题 -----
 
-        if (!newA.match(/[a-zA-Z]+/g)) {
-          // 仅作用于非英文演员、非素人演员：剔除内部空格
-          if (!av.actressRealName) {
-            newA = newA.replaceAll(/\s/g, '');
-          }
-        }
-
-        return newA;
-      });
-      console.log('去空格后的演员列表', av.actress);
-      av.actress = av.actress.join(' ');
-    } // ***** 处理标题 *****
-
-    {
-      // 去头尾演员名
-      let startAct = new RegExp('^' + av.actress, 'g');
-      let endAct = new RegExp(av.actress + '$', 'g');
-      let temp = startAct.test(av.workName) || endAct.test(av.workName);
-      console.log('头尾是否包含演员名', temp);
-
-      if (temp) {
-        console.log('演员名字符串', av.actress);
-        av.workName = av.workName.replace(av.actress, '');
-      } // 头尾去空格
-
-
-      av.workName = av.workName.trim();
-      console.log('去头尾演员名后的标题', av.workName);
-    }
+    av = refineTitle(av); // ----- 处理系列名 -----
 
     if (av && av.seriesName) {
-      var _av$workName;
-
       console.log('***** 系列作品 *****');
-      av.seriesName = av.seriesName.trim();
-      /* 包含编号：检测作品名是否包含编号 */
-      // 是否包含编号标识
+      av.seriesName = av.seriesName.trim(); // 是否包含编号标识
 
-      let hasIndicator = DIGIT_TYPE.findIndex(d => av.workName.includes(d));
-      console.log('编号标识数组位置', hasIndicator); // 标识类型
+      let numType1 = checkIndicator(av.workName); // 是否包含纯数字
 
-      let indicator = DIGIT_TYPE[hasIndicator];
-      console.log('编号标识', indicator); // 是否包含纯数字
+      let numType2 = checkDigit(av.workName, av.seriesName);
 
-      let hasDigit = /\d+/.test(av.workName);
-      console.log('是否有纯数字', hasDigit);
-      let hasNum = hasIndicator !== -1 || hasDigit;
-      console.log('作品名是否包含编号', hasNum);
-      /* 不含编号：检测作品名前缀（空格之前的内容）和系列名的关系 */
-
-      let workPrefix = (_av$workName = av.workName) === null || _av$workName === void 0 ? void 0 : _av$workName.match(/^(\S+)\s+(\S+)/);
-      console.log('作品名前缀', workPrefix === null || workPrefix === void 0 ? void 0 : workPrefix[1]); // 判断作品名前缀和系列名之间的关系
-      // 作品名包含系列名
-
-      let workHasSeries = workPrefix !== null && workPrefix !== void 0 && workPrefix[0] ? workPrefix[1].trim().replaceAll(' ', '').includes(av.seriesName) : false;
-      console.log('作品名前缀中包含系列名', workHasSeries); // 系列名是否包含作品名
-
-      let seriesHasWork = av.seriesName.includes(workPrefix === null || workPrefix === void 0 ? void 0 : workPrefix[1].trim().replaceAll(' ', ''));
-      console.log('系列名中包含作品名前缀', seriesHasWork);
-      /* 作品名前缀包含系列名，或系列名包含作品名前缀，说明作品名包含系列名 */
-
-      if (hasNum) {
-        var _av$workName$match, _av$workName$match2;
-
-        // ----- 作品名包含系列名（含编号）-----
-        // 格式：系列名（日期）编号 演员名（）
-        // 纯数字部分
-        let digitTypeB = (_av$workName$match = av.workName.match(/\d+/)) === null || _av$workName$match === void 0 ? void 0 : _av$workName$match[0];
-        console.log('纯数字部分', digitTypeB); // 标识符和编号部分
-
-        let digitTypeA = (_av$workName$match2 = av.workName.match(new RegExp(indicator + '[\\S\\s]*' + digitTypeB))) === null || _av$workName$match2 === void 0 ? void 0 : _av$workName$match2[0];
-        console.log('标识符和编号部分', digitTypeA); // 编号部分
-
-        let num = digitTypeA ?? digitTypeB;
-        console.log('编号部分', num); // 为了名称简单，不再显示剩余部分
-        // let suffix = av.workName.match(new RegExp(num + '\\s*([\\S\\s]+)$'))?.[1]
-
+      if (numType1 || !numType1 && numType2) {
+        // 包含编号标识 / 不包含编号标识但包含纯数字：
+        // 系列名（日期）编号部分（番号）演员名
         let digitFirstSeries = DIGIT_FIRST_SERIES.find(x => av.seriesName === x);
         console.log('是否属于编号在前日期在后的特殊系列', digitFirstSeries);
 
         if (digitFirstSeries) {
-          finalName = `${av.seriesName} ${num}（${datify(av.date)}）${av.actress}（${av.code}）${av.actressRealName ?? ''}`;
+          finalName = `${av.seriesName} ${numType1 ?? numType2}（${datify(av.date)}）${av.actress}（${av.code}）${av.actressRealName ?? ''}`;
         } else {
-          finalName = `${av.seriesName}（${datify(av.date)}）${num}（${av.code}）${av.actress}`;
+          finalName = `${av.seriesName}（${datify(av.date)}）${numType1 ?? numType2}（${av.code}）${av.actress}`;
         }
 
         console.log('有编号的作品剩余部分', finalName);
-      } else if (workHasSeries || seriesHasWork) {
-        // ----- 作品名包含系列名（不含编号）-----
-        // 格式：系列名（日期）演员名（番号）作品名剩余部分
-        // 剩余部分 = 作品名剔除前缀
-        let suffix = workPrefix === null || workPrefix === void 0 ? void 0 : workPrefix[2];
-        finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`;
-        console.log('作品名包含系列名（不含编号）', finalName);
       } else {
-        // --- 作品名不含系列名 ---
-        // 格式：系列名（日期）演员名（番号）作品名剩余部分
-        // 剩余部分 = 原始作品名
-        let suffix = av.workName;
-        finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）${suffix}`;
-      }
+        // 不含编号
+        // 系列名（日期）演员名（番号）
+        finalName = `${av.seriesName}（${datify(av.date)}）${av.actress}（${av.code}）`;
+      } // /* 不含编号：检测作品名前缀（空格之前的内容）和系列名的关系 */
+      // let workPrefix = av.workName?.match(/^(\S+)\s+(\S+)/)
+      // console.log('作品名前缀', workPrefix?.[1])
+      // // 判断作品名前缀和系列名之间的关系
+      // // 作品名包含系列名
+      // let workHasSeries = workPrefix?.[0] ? workPrefix[1].trim().replaceAll(' ', '').includes(av.seriesName) : false
+      // console.log('作品名前缀中包含系列名', workHasSeries)
+      // // 系列名是否包含作品名
+      // let seriesHasWork = av.seriesName.includes(workPrefix?.[1].trim().replaceAll(' ', ''))
+      // console.log('系列名中包含作品名前缀', seriesHasWork)
+      // /* 作品名前缀包含系列名，或系列名包含作品名前缀，说明作品名包含系列名 */
+
     } else {
       console.log('***** 单体作品 *****'); //（日期）演员（番号）作品名
 
@@ -378,10 +421,11 @@ async function final_final(avObj) {
 }
 ;// CONCATENATED MODULE: ./src/makers/ca_group.js
 
-function CA(url) {
+async function CA(url) {
   console.log('传入 URL', url); // 定义页面元素
 
-  let workName,
+  let makerName,
+      workName,
       seriesName,
       date,
       actress = [],
@@ -389,34 +433,90 @@ function CA(url) {
       imgUrl; // 仅在作品页生效
 
   if (url.includes('detail')) {
-    // 作品名
-    workName = document.querySelector('.page-main-title-tx').innerHTML; // 页面数据列表
+    // 厂商名
+    switch (document.domain) {
+      case 'attackers.net':
+        makerName = 'Attackers';
+        break;
 
-    let infoList = document.querySelectorAll('.works-detail-info > li');
-    console.log('数据列表', infoList); // 系列名
+      case 'ideapocket.com':
+        makerName = 'Idea Pocket';
+        break;
 
-    seriesName = infoList[4].querySelector('a') ? infoList[4].querySelector('a').innerHTML : undefined; // 日期
+      case 'madonna-av.com':
+        makerName = 'Madonna';
+        break;
 
-    date = infoList[2].querySelector('a').innerHTML; // 演员列表
+      case 'moodyz.com':
+        makerName = 'MOODYZ';
+        break;
 
-    let aList = infoList[0].querySelectorAll('li');
+      case 'premium-beauty.com':
+        makerName = 'Premium';
+        break;
+
+      case 's1s1s1.com':
+        makerName = 'S1';
+        break;
+
+      case 'honnaka.jp':
+        makerName = '本中';
+        break;
+
+      case 'mvg.jp':
+        makerName = 'MVG';
+        break;
+    }
+
+    console.log('厂商名', makerName); // 作品名
+
+    workName = document.querySelector('h2.p-workPage__title').innerText;
+    console.log('作品名', workName); // 页面数据列表
+
+    let keyList = document.querySelectorAll('.p-workPage__table .th');
+    let valueList = document.querySelectorAll('.p-workPage__table .th + div');
+    console.log('数据列表', keyList, valueList); // 系列名
+
+    seriesName = valueList[2].innerText;
+    console.log('系列名', seriesName); // 日期
+
+    date = valueList[1].innerText;
+    console.log('日期', date); // 演员列表
+
+    let aList = valueList[0].querySelectorAll('.item');
     actress = [];
-    aList.forEach(a => actress.push(a.innerText)); // 番号
+    aList.forEach(a => actress.push(a.innerText));
+    console.log('演员列表', actress); // 番号
 
-    code = infoList[7].innerHTML.match(/[a-z,A-Z]+\d+/)[0];
-    code = codify(code); // 封面地址
+    let codePropIndex = Array.from(keyList).findIndex(key => key.innerText === '品番');
+    console.log('番号索引', codePropIndex);
+    let codePrefix = valueList[codePropIndex].querySelector('span').innerText;
+    code = valueList[codePropIndex].querySelector('p').innerText.replace(codePrefix, '');
+    code = codify(code);
+    console.log('番号', code); // 封面地址
 
-    imgUrl = `https://www.madonna-av.com/contents/works/${code.replace('-', '').toLowerCase()}/${code.replace('-', '').toLowerCase()}-pl.jpg`;
+    imgUrl = document.querySelectorAll('.swiper-wrapper img')[1].dataset.src; // 跨域获取
+
+    const res = await fetch(imgUrl);
+
+    try {
+      const blob = await res.blob();
+      imgUrl = window.URL.createObjectURL(blob);
+    } catch (e) {
+      console.log('下载图片失败', e);
+    }
+
+    console.log('封面地址', imgUrl);
     let av = {
-      makerName: 'Madonna',
+      makerName: makerName,
       workName: workName,
       seriesName: seriesName,
       date: date,
       actress: actress,
       code: code,
       imgUrl: imgUrl
-    }; // console.log('Madonna AV 对象', av)
-
+    };
+    console.log(`${makerName} AV 对象`, av);
     return av;
   }
 }
@@ -936,9 +1036,10 @@ async function MGS(url) {
     makerName = MAKER_TRANS[valueList[1].innerText] ?? valueList[1].innerText;
     console.log('厂商名', makerName); // 系列名
 
-    seriesName = valueList[6].innerText; // 如果包含系列字段，说明有系列名称
+    let seriesIndex = keyList.findIndex(key => key === 'シリーズ：');
+    seriesName = valueList[seriesIndex].innerText; // 如果包含系列字段，说明有系列名称
 
-    console.log('系列名', seriesName); // 日期
+    console.log('系列名', seriesIndex, seriesName); // 日期
 
     date = valueList[4].innerText;
     console.log('日期', date); // 演员列表
@@ -1000,21 +1101,22 @@ async function main() {
   let a = createBtn(); // 核心功能
 
   let domain = document.domain,
-      url = document.URL;
-  let av = {};
+      url = document.URL,
+      av = {};
   console.log('域名', domain, url);
 
   async function trySwitch() {
     switch (domain) {
       // ----- CA 集团厂商 -----
-      case 'www.madonna-av.com':
-      case 'www.s1s1s1.com':
-      case 'www.moodyz.com':
-      case 'www.honnaka.jp':
-      case 'www.ideapocket.com':
-      case 'www.attackers.net':
-      case 'www.premium-beauty.com':
-        av = CA(url);
+      case 'madonna-av.com':
+      case 's1s1s1.com':
+      case 'moodyz.com':
+      case 'honnaka.jp':
+      case 'ideapocket.com':
+      case 'attackers.net':
+      case 'premium-beauty.com':
+      case 'mvg.jp':
+        av = await CA(url);
         break;
 
       case 'www.naughtyamerica.com':
