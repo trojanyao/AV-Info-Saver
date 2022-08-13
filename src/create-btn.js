@@ -58,6 +58,7 @@ export function createBtn() {
 	menuDiv.style.flexDirection = 'column';
 	menuDiv.style.color = '#333333'
 	menuDiv.style.fontFamily = '"PingFang SC", sans-serif';
+	menuDiv.style.lineHeight = '1';
 	// ** 标题 **
 	titleDiv.id = 'title';
 	titleDiv.innerHTML = 'AV 作品信息一键保存工具';
