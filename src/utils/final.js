@@ -6,7 +6,8 @@ import { checkIndicator } from './check-indicator';
 import { checkDigit } from './check-digit';
 const DIGIT_FIRST_SERIES = [
 	'ラグジュTV',
-	'新入社員のお仕事'
+	'新入社員のお仕事',
+	'職女。'
 ]
 
 // 拼接最后文件名
