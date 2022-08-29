@@ -17,6 +17,7 @@ module.exports = {
 		'https://attackers.net/*',
 		'https://premium-beauty.com/*',
 		'https://mvg.jp/*',
+		'https://www.mousouzoku-av.com/*',
 		// 欧美
 		'https://www.naughtyamerica.com/*',
 		'https://www.1pondo.tv/*',

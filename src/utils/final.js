@@ -68,7 +68,7 @@ export async function final(avObj) {
 			console.log('单体作品', finalName)
 		}
 
-		finalName = `【${av.makerName}】${finalName}${Boolean(digitFirstSeries) ? '' : ' '}${av.duration ? (av.resolution ? `[${av.duration}; ${av.resolution}]` : `[${av.duration}]`) : ''}.jpg`
+		finalName = `【${av.makerName}】${finalName}${av.duration ? (av.resolution ? `[${av.duration}; ${av.resolution}]` : `[${av.duration}]`) : ''}.jpg`
 	} else {
 		// ---------- 欧美作品，无番号 ----------
 		// 替换半角冒号
@@ -82,6 +82,7 @@ export async function final(avObj) {
 
 		finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(', ')} - ${av.workName}${av.duration ? `[${av.duration}; ${av.resolution.join(', ')}]` : ''}.jpg`
 	}
+
 	console.log('最后拼接的文件名', finalName)
 
 	return finalName

@@ -9,6 +9,7 @@ import Brazzers from './makers/brazzers'
 import Caribbean from './makers/caribbean'
 import SOD from './makers/sod'
 import MGS from './makers/mgstage'
+import Mousouzuku from './makers/mousouzoku'
 
 async function main() {
 	// 创建按钮
@@ -50,6 +51,7 @@ async function main() {
 			case 'www.caribbeancom.com': try { av = await Caribbean(url) } catch { }; break;
 			case 'ec.sod.co.jp': try { av = await SOD(url) } catch { }; break;
 			case 'www.mgstage.com': try { av = await MGS(url) } catch { }; break;
+			case 'www.mousouzoku-av.com': try { av = await Mousouzuku(url) } catch { }; break;
 		}
 	}
 
