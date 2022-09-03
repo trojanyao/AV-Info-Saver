@@ -4,61 +4,71 @@ const makerJSON = `{
 }`
 
 export default async function Prestige(url) {
-    // 定义页面元素
-    let makerName, workName, seriesName, date, actress = [], code, imgUrl, duration
-    // 仅在作品页生效
-    if (url.includes('https://www.prestige-av.com/goods/')) {
-        // 作品信息列表
-        let keyList = document.querySelectorAll('dl.spec_layout > dt')
-        let infoList = document.querySelectorAll('dl.spec_layout > dd')
-        // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
-        keyList = [...keyList].map(key => {
-            return key.innerText
-        })
-        console.log('数据列表', keyList, infoList)
+	// 定义页面元素
+	let makerName, workName, seriesName, date, actress = [], code, imgUrl, duration
+	// 仅在作品页生效
+	if (url.includes('https://www.prestige-av.com/goods/')) {
+		// 作品名
+		const spanText = document.querySelector('.min-h-main h1 span').innerText
+		workName = document.querySelector('.min-h-main h1').innerText.replace(spanText, '').trim()
+		// console.log('作品名', workName)
 
-        // 厂商名
-        let makerTrans = JSON.parse(makerJSON)
-        makerName = makerTrans[infoList[3].innerText] ?? infoList[3].innerText
+		// 作品信息列表
+		let keyList = document.querySelectorAll('.text-xl > .hidden > .flex > p')
+		let valueList = document.querySelectorAll('.text-xl > .hidden > .flex > div')
+		// keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+		keyList = [...keyList].map(key => key.innerText)
+		valueList = [...valueList].map(value => value.innerText)
+		// console.log('数据列表', keyList, valueList)
 
-        // 作品名
-        workName = document.querySelector('.product_title_layout_01 > h1').innerText.replace(/\＋\S+/, '')
+		// 厂商名
+		let makerTrans = JSON.parse(makerJSON)
+		const makerIndex = keyList.findIndex(key => key.includes('メーカー'))
+		makerName = makerTrans[valueList[makerIndex]] ?? valueList[makerIndex]
+		// console.log('厂商名', makerIndex, makerName)
 
-        // 系列名
-        seriesName = keyList.includes('シリーズ：') ? infoList[6].innerText : null  // 如果包含系列字段，说明有系列名称
+		// 系列名
+		const seriesIndex = keyList.findIndex(key => key.includes('シリーズ'))
+		seriesName = seriesIndex > -1 ? valueList[seriesIndex] : null  // 如果包含系列字段，说明有系列名称
+		// console.log('系列名', seriesName)
 
-        // 日期
-        date = infoList[2].innerText
+		// 日期
+		date = valueList[0]
+		console.log('日期', date)
 
-        // 演员列表
-        // let aList = infoList[1].querySelectorAll('.spec-content > span')
-        // aList.forEach(a => actress.push(a.innerText.trim()))
-        actress[0] = infoList[0].innerText
-        console.log('演员列表', actress)
+		// 演员列表
+		// let aList = infoList[1].querySelectorAll('.spec-content > span')
+		// aList.forEach(a => actress.push(a.innerText.trim()))
+		// actress[0] = infoList[0].innerText
+		const actIndex = keyList.findIndex(key => key.includes('出演者'))
+		actress[0] = valueList[actIndex]
+		console.log('演员列表', actress)
 
-        // 番号
-        code = infoList[4].innerText.replace('TKT', '')
-        let codeCap = code.match(/[a-z,A-Z]+/)?.[0].toLowerCase()
-        let codeNum = code.match(/[0-9]+/)?.[0]
-        console.log('番号', codeCap, codeNum)
+		// 番号
+		const codeIndex = keyList.findIndex(key => key.includes('品番'))
+		code = valueList[codeIndex]
+		// code = infoList[4].innerText.replace('TKT', '')
+		// let codeCap = code.match(/[a-z,A-Z]+/)?.[0].toLowerCase()
+		// let codeNum = code.match(/[0-9]+/)?.[0]
+		console.log('番号', code)
 
-        // 封面地址
-        imgUrl = document.querySelector('.package_layout > a > img').src.replace('pf_p', 'pb_e')
+		// 封面地址
+		const url = document.querySelector('.c-ratio-image img').src.replace('pf', 'pb')
+		imgUrl = url.match(/^https[\s\S]+\.jpg/)?.[0] + '?w=800&f=jpg'
+		console.log('图片地址', imgUrl)
+		// https://www.prestige-av.com/api/media/goods/prestige/abw/273/pb_abw-273.jpg?w=800&f=webp
 
-        // 时长
-        // duration = infoList[3].querySelector('.spec-content').innerText.replaceAll(':', '.')
-
-        let av = {
-            makerName: makerName,
-            workName: workName,
-            seriesName: seriesName,
-            date: date,
-            actress: actress,
-            code: code,
-            imgUrl: imgUrl,
-            duration: duration
-        }
-        console.log('Prestige AV 对象', av)
-        return av
-    }
+		let av = {
+			makerName: makerName,
+			workName: workName,
+			seriesName: seriesName,
+			date: date,
+			actress: actress,
+			code: code,
+			imgUrl: imgUrl,
+			duration: duration
+		}
+		console.log('Prestige AV 对象', av)
+		return av
+	}
 }
