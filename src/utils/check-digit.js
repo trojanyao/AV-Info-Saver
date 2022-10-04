@@ -1,5 +1,6 @@
 // 检测是否包含纯数字
 export function checkDigit(workName, seriesName) {
+	let seriesNameNoSpace = seriesName.replaceAll(' ', '')
 	// 有纯数字编号也肯定是在标题中的系列名后跟着纯数字，所以先提取出后面跟着纯数字的子字符串的多种可能
 	let matches = workName.matchAll(/\s*(?<substr>\S+)\d+/g)
 	let subStrs = []
@@ -14,7 +15,13 @@ export function checkDigit(workName, seriesName) {
 	console.log('########## 后面有数字的子字符串 ##########', subStrs)
 
 	// 然后和系列名比对，查找出真正和系列名相关的子字符串
-	let trueStr = subStrs.filter(substr => substr.includes(seriesName) || seriesName.includes(substr))
+	let trueStr = subStrs.filter(substr => {
+		let substrNoSpace = substr.replaceAll(' ', '')
+		return (
+      substrNoSpace.includes(seriesNameNoSpace) ||
+      seriesNameNoSpace.includes(substrNoSpace)
+    );
+	})
 	console.log('真正的子串', trueStr)
 	if (trueStr.length > 0) {
 		// 符合条件的字串数 > 0：包含纯数字
