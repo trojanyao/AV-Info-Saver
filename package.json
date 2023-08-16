@@ -10,7 +10,8 @@
     "postversion": "git push --follow-tags",
     "analize": "npm_config_report=true npm run build",
     "build": "webpack --mode production --config config/webpack.config.production.cjs",
-    "dev": "webpack --mode development --config config/webpack.config.dev.cjs"
+    "dev": "webpack --mode development --config config/webpack.config.dev.cjs",
+    "lint": ""
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,8 @@
     "babel-loader": "8.2.3",
     "browserslist": "4.19.3",
     "css-loader": "6.6.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "less": "4.1.2",
     "less-loader": "10.2.0",
     "style-loader": "3.3.1",
