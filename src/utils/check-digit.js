@@ -2,7 +2,8 @@
 export function checkDigit(workName, seriesName) {
 	let seriesNameNoSpace = seriesName.replaceAll(' ', '')
 	// 有纯数字编号也肯定是在标题中的系列名后跟着纯数字，所以先提取出后面跟着纯数字的子字符串的多种可能
-	let matches = workName.matchAll(/\s*(?<substr>\S+)\d+/g)
+	let matches = workName.matchAll(/\s*(?<substr>[\S\s]*)\d+/g)
+	console.log('匹配结果', matches)
 	let subStrs = []
 	for (let match of matches) {
 		let substr = match.groups.substr.replace(/\d/g, '')
