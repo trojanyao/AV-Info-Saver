@@ -12,6 +12,7 @@
 // @match       https://attackers.net/*
 // @match       https://premium-beauty.com/*
 // @match       https://mvg.jp/*
+// @match       https://www.mousouzoku-av.com/*
 // @match       https://www.naughtyamerica.com/*
 // @match       https://www.1pondo.tv/*
 // @match       https://www.prestige-av.com/*
@@ -57,8 +58,8 @@ function createBtn() {
   wrapper.style.top = '10px';
   wrapper.style.right = '10px';
   wrapper.style.padding = '15px 20px';
-  wrapper.style.background = 'rgba(241, 241, 241, .92)'; //wrapper.style.background = 'rgba(0, 0, 0, .5)';
-
+  wrapper.style.boxSizing = 'content-box';
+  wrapper.style.background = 'rgba(241, 241, 241, .92)';
   wrapper.style.borderRadius = '16px';
   wrapper.style.display = 'flex';
   wrapper.style.alignItems = 'center';
@@ -89,15 +90,16 @@ function createBtn() {
   menuDiv.style.display = 'flex';
   menuDiv.style.flexDirection = 'column';
   menuDiv.style.color = '#333333';
-  menuDiv.style.fontFamily = '"PingFang SC", sans-serif'; // ** 标题 **
+  menuDiv.style.fontFamily = '"PingFang SC", sans-serif';
+  menuDiv.style.lineHeight = '1'; // ** 标题 **
 
   titleDiv.id = 'title';
   titleDiv.innerHTML = 'AV 作品信息一键保存工具';
   titleDiv.style.fontSize = '18px';
   titleDiv.style.fontWeight = '600';
   menuDiv.appendChild(titleDiv); // ** 菜单 **
-  // toggleDiv.style.marginTop = '10px';
 
+  toggleDiv.style.marginTop = '10px';
   toggleDiv.style.width = document.querySelector('#title').offsetWidth;
   toggleDiv.style.display = 'flex';
   toggleDiv.style.flexDirection = 'row';
@@ -106,12 +108,13 @@ function createBtn() {
   menuDiv.appendChild(toggleDiv); // 菜单文本
 
   toggleText.innerHTML = '打开作品页后自动保存';
-  toggleText.fontSize = '12px';
+  toggleText.style.fontSize = '14px';
   toggleDiv.appendChild(toggleText); // 菜单按钮
 
   toggleBtn.style.width = '36px';
-  toggleBtn.style.height = '18px';
+  toggleBtn.style.height = '20px';
   toggleBtn.style.borderRadius = '18px';
+  toggleBtn.style.position = 'relative';
 
   if (autoSave === 'yes') {
     toggleBtn.style.background = 'linear-gradient(90deg, #1E93FF 0%, #1C8CF2 100%)';
@@ -133,7 +136,7 @@ function createBtn() {
   btn.style.background = '#F3F3F3';
 
   if (autoSave === 'yes') {
-    btn.style.left = '18px';
+    btn.style.right = '0';
     btn.style.boxShadow = '5px 5px 13px rgba(219, 219, 219, 0.9), 5px -5px 10px rgba(219, 219, 219, 0.2), -5px 5px 10px rgba(12, 72, 128, 0.2), inset -1px -1px 2px rgba(219, 219, 219, 0.5), inset 1px 1px 2px rgba(255, 255, 255, 0.3)';
   } else if (!autoSave === 'no') {
     btn.style.left = '0';
@@ -155,7 +158,7 @@ function createBtn() {
     if (!localStorage.getItem('autoSave') || localStorage.getItem('autoSave') === 'no') {
       toggleBtn.style.background = 'linear-gradient(90deg, #1E93FF 0%, #1C8CF2 100%)';
       toggleBtn.style.boxShadow = 'inset -5px -5px 10px rgba(31, 154, 255, 0.9), inset 5px -5px 10px rgba(25, 126, 218, 0.2), inset -5px 5px 10px rgba(25, 126, 218, 0.2)';
-      btn.style.left = '18px';
+      btn.style.left = '16px';
       btn.style.boxShadow = '5px 5px 13px rgba(219, 219, 219, 0.9), 5px -5px 10px rgba(219, 219, 219, 0.2), -5px 5px 10px rgba(12, 72, 128, 0.2), inset -1px -1px 2px rgba(219, 219, 219, 0.5), inset 1px 1px 2px rgba(255, 255, 255, 0.3)';
       localStorage.setItem('autoSave', 'yes');
       console.log('点击按钮');
@@ -302,38 +305,21 @@ function checkIndicator(workName) {
 ;// CONCATENATED MODULE: ./src/utils/check-digit.js
 // 检测是否包含纯数字
 function checkDigit(workName, seriesName) {
-  // 有纯数字编号也肯定是在标题中的系列名后跟着纯数字，所以先提取出后面跟着纯数字的子字符串的多种可能
-  let matches = workName.matchAll(/\s*(?<substr>\S+)\d+/g);
-  let subStrs = [];
+  let seriesNameNoSpace = seriesName.replaceAll(" ", "");
+  /* 有纯数字编号也肯定是在标题中的系列名后跟着纯数字 */
 
-  for (let match of matches) {
-    let substr = match.groups.substr.replace(/\d/g, '');
-    subStrs.push(substr);
-  }
+  const reg = new RegExp(`\\s*${seriesNameNoSpace}\\s*(\\d+)`, "g");
+  let matches = [...workName.replaceAll(" ", "").matchAll(reg)];
 
-  console.log('########## 后面有数字的子字符串 ##########', subStrs); // 然后和系列名比对，查找出真正和系列名相关的子字符串
-
-  let trueStr = subStrs.filter(substr => {
-    if (substr.includes(seriesName) || seriesName.includes(substr)) {
-      return true;
-    } else {
-      return false;
+  for (const match of matches) {
+    if (match.length >= 2) {
+      // 说明匹配到了捕获组，将其返回（系列编号）
+      return match[1];
     }
-  });
-  console.log('真正的子串', trueStr);
+  } // 不包含纯数字
 
-  if (trueStr.length > 0) {
-    var _workName$match;
 
-    // 符合条件的字串数 > 0：包含纯数字
-    // 查找纯数字
-    let num = (_workName$match = workName.match(new RegExp(trueStr[0] + '\\s*(\\d+)'))) === null || _workName$match === void 0 ? void 0 : _workName$match[1];
-    console.log('纯数字编号', num);
-    return num;
-  } else {
-    // 符合条件的字串数 <= 0：不包含纯数字
-    return undefined;
-  }
+  return undefined;
 }
 ;// CONCATENATED MODULE: ./src/utils/final.js
 
@@ -342,13 +328,13 @@ function checkDigit(workName, seriesName) {
 
 
 
-const DIGIT_FIRST_SERIES = ['ラグジュTV']; // 拼接最后文件名
+const DIGIT_FIRST_SERIES = ["ラグジュTV", "新入社員のお仕事", "社長秘書のお仕事", "職女。"]; // 拼接最后文件名
 
 async function final_final(avObj) {
   // 深拷贝
   let av = JSON.parse(JSON.stringify(avObj));
   let finalName;
-  console.log('传入的 AV 对象', av);
+  console.log("传入的 AV 对象", av);
 
   if (av.code) {
     // ---------- 日本作品，有番号 ----------
@@ -358,26 +344,24 @@ async function final_final(avObj) {
     av = refineTitle(av); // ----- 处理系列名 -----
 
     if (av && av.seriesName) {
-      console.log('***** 系列作品 *****');
-      av.seriesName = av.seriesName.trim(); // 是否包含编号标识
+      av.seriesName = av.seriesName.trim();
+      const numType1 = checkIndicator(av.workName); // 是否包含编号标识
 
-      let numType1 = checkIndicator(av.workName); // 是否包含纯数字
-
-      let numType2 = checkDigit(av.workName, av.seriesName);
+      const numType2 = checkDigit(av.workName, av.seriesName); // 是否包含纯数字
 
       if (numType1 || !numType1 && numType2) {
         // 包含编号标识 / 不包含编号标识但包含纯数字：
         // 系列名（日期）编号部分（番号）演员名
-        let digitFirstSeries = DIGIT_FIRST_SERIES.find(x => av.seriesName === x);
-        console.log('是否属于编号在前日期在后的特殊系列', digitFirstSeries);
+        const digitFirstSeries = DIGIT_FIRST_SERIES.find(x => av.seriesName === x);
+        console.log("是否属于编号在前日期在后的特殊系列", digitFirstSeries);
 
         if (digitFirstSeries) {
-          finalName = `${av.seriesName} ${numType1 ?? numType2}（${datify(av.date)}）${av.actress}（${av.code}）${av.actressRealName ?? ''}`;
+          finalName = `${av.seriesName} ${numType1 ?? numType2}（${datify(av.date)}）${av.actress}（${av.code}）${av.actressRealName ?? ""}`;
         } else {
           finalName = `${av.seriesName}（${datify(av.date)}）${numType1 ?? numType2}（${av.code}）${av.actress}`;
         }
 
-        console.log('有编号的作品剩余部分', finalName);
+        console.log("有编号的作品剩余部分", finalName);
       } else {
         // 不含编号
         // 系列名（日期）演员名（番号）
@@ -395,28 +379,28 @@ async function final_final(avObj) {
       // /* 作品名前缀包含系列名，或系列名包含作品名前缀，说明作品名包含系列名 */
 
     } else {
-      console.log('***** 单体作品 *****'); //（日期）演员（番号）作品名
+      console.log("***** 单体作品 *****"); // （日期）演员（番号）作品名
 
       finalName = `（${datify(av.date)}）${av.actress}（${codify(av.code)}）${av.workName}`;
-      console.log('单体作品', finalName);
+      console.log("单体作品", finalName);
     }
 
-    finalName = `【${av.makerName}】${finalName}${av.duration ? av.resolution ? ` [${av.duration}; ${av.resolution}]` : ` [${av.duration}]` : ''}.jpg`;
+    finalName = `【${av.makerName}】${finalName}${av.duration ? av.resolution ? `[${av.duration}; ${av.resolution}]` : `[${av.duration}]` : ""}.jpg`;
   } else {
     // ---------- 欧美作品，无番号 ----------
     // 替换半角冒号
-    av.workName = av.workName.replace(': ', '-');
-    let newActress = [];
+    av.workName = av.workName.replace(": ", "-");
+    const newActress = [];
 
-    for (let a of av.actress) {
+    for (const a of av.actress) {
       await newActress.push(a.toLowerCase().replace(/\b(\w)|\s(\w)/g, s => s.toUpperCase()));
     }
 
-    console.log('修改后的演员列表', newActress);
-    finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(', ')} - ${av.workName}${av.duration ? `[${av.duration}; ${av.resolution.join(', ')}]` : ''}.jpg`;
+    console.log("修改后的演员列表", newActress);
+    finalName = `【${av.makerName}】${av.seriesName || ""}（${datify(av.date)}）${newActress.join(", ")} - ${av.workName}${av.duration ? `[${av.duration}; ${av.resolution.join(", ")}]` : ""}.jpg`;
   }
 
-  console.log('最后拼接的文件名', finalName);
+  console.log("最后拼接的文件名", finalName);
   return finalName;
 }
 ;// CONCATENATED MODULE: ./src/makers/ca_group.js
@@ -651,40 +635,59 @@ async function Prestige(url) {
       imgUrl,
       duration; // 仅在作品页生效
 
-  if (url.includes('https://www.prestige-av.com/goods/')) {
-    var _code$match, _code$match2;
+  if (url.includes("https://www.prestige-av.com/goods/")) {
+    var _url$match;
 
+    // 作品名
+    const spanText = document.querySelector(".min-h-main h1 span").innerText;
+    workName = document.querySelector(".min-h-main h1").innerText.replace(spanText, "").trim(); // console.log('作品名', workName)
     // 作品信息列表
-    let keyList = document.querySelectorAll('dl.spec_layout > dt');
-    let infoList = document.querySelectorAll('dl.spec_layout > dd'); // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
 
-    keyList = [...keyList].map(key => {
-      return key.innerText;
-    });
-    console.log('数据列表', keyList, infoList); // 厂商名
+    let keyList = document.querySelectorAll(".text-xl > .hidden > .flex > p");
+    let valueList = document.querySelectorAll(".text-xl > .hidden > .flex > div"); // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+
+    keyList = [...keyList].map(key => key.innerText);
+    valueList = [...valueList].map(value => value.innerText); // console.log('数据列表', keyList, valueList)
+    // 厂商名
 
     let makerTrans = JSON.parse(makerJSON);
-    makerName = makerTrans[infoList[3].innerText] ?? infoList[3].innerText; // 作品名
+    const makerIndex = keyList.findIndex(key => key.includes("メーカー"));
+    makerName = makerTrans[valueList[makerIndex]] ?? valueList[makerIndex]; // console.log('厂商名', makerIndex, makerName)
+    // 系列名
 
-    workName = document.querySelector('.product_title_layout_01 > h1').innerText.replace(/\＋\S+/, ''); // 系列名
-
-    seriesName = keyList.includes('シリーズ：') ? infoList[6].innerText : null; // 如果包含系列字段，说明有系列名称
+    const seriesIndex = keyList.findIndex(key => key.includes("シリーズ"));
+    seriesName = seriesIndex > -1 ? valueList[seriesIndex] : null; // 如果包含系列字段，说明有系列名称
+    // console.log('系列名', seriesName)
     // 日期
 
-    date = infoList[2].innerText; // 演员列表
+    date = valueList[0];
+    console.log("日期", date); // 演员列表
     // let aList = infoList[1].querySelectorAll('.spec-content > span')
     // aList.forEach(a => actress.push(a.innerText.trim()))
+    // actress[0] = infoList[0].innerText
 
-    actress[0] = infoList[0].innerText;
-    console.log('演员列表', actress); // 番号
+    const actIndex = keyList.findIndex(key => key.includes("出演者"));
+    actress[0] = valueList[actIndex];
+    console.log("演员列表", actress); // 番号
 
-    code = infoList[4].innerText.replace('TKT', '');
-    let codeCap = (_code$match = code.match(/[a-z,A-Z]+/)) === null || _code$match === void 0 ? void 0 : _code$match[0].toLowerCase();
-    let codeNum = (_code$match2 = code.match(/[0-9]+/)) === null || _code$match2 === void 0 ? void 0 : _code$match2[0];
-    console.log('番号', codeCap, codeNum); // 封面地址
+    const codeIndex = keyList.findIndex(key => key.includes("品番"));
+    code = valueList[codeIndex]; // code = infoList[4].innerText.replace('TKT', '')
+    // let codeCap = code.match(/[a-z,A-Z]+/)?.[0].toLowerCase()
+    // let codeNum = code.match(/[0-9]+/)?.[0]
 
-    imgUrl = document.querySelector('.package_layout > a > img').src.replace('pf_p', 'pb_e'); // 时长
-    // duration = infoList[3].querySelector('.spec-content').innerText.replaceAll(':', '.')
+    console.log("番号", code); // 封面地址
+
+    const url = document.querySelector(".c-ratio-image img").src.replace("pf", "pb").replace("_p_", "_e_");
+    imgUrl = (_url$match = url.match(/^https[\s\S]+\.jpg/)) === null || _url$match === void 0 ? void 0 : _url$match[0]; // const res = await fetch(imgUrl);
+    // try {
+    //   const blob = await res.blob();
+    //   imgUrl = window.URL.createObjectURL(blob);
+    // } catch (e) {
+    //   console.log("下载图片失败", e);
+    // }
+
+    console.log("图片地址", imgUrl); // https://www.prestige-av.com/api/media/goods/prestige/ezd/374/pb_e_ezd-374.jpg
+    // https://www.prestige-av.com/api/media/goods/prestige/ezd/374/pb_p_ezd-374.jpg
 
     let av = {
       makerName: makerName,
@@ -696,13 +699,13 @@ async function Prestige(url) {
       imgUrl: imgUrl,
       duration: duration
     };
-    console.log('Prestige AV 对象', av);
+    console.log("Prestige AV 对象", av);
     return av;
   }
 }
 ;// CONCATENATED MODULE: ./src/makers/tokyo-hot.js
 // 厂商名转换列表
-const seriesList = ['Wカン', '東熱激情 淫乱女教師中出授業 特集'];
+const seriesList = ['Wカン', '東熱激情 淫乱女教師中出授業 特集', '東熱激情 密着パンスト24時！特集'];
 async function TokyoHot(url) {
   // 定义页面元素
   let makerName,
@@ -1083,7 +1086,82 @@ async function MGS(url) {
     return av;
   }
 }
+;// CONCATENATED MODULE: ./src/makers/mousouzoku.js
+async function Mousouzoku(url) {
+  // 定义页面元素
+  let makerName,
+      workName,
+      seriesName,
+      date,
+      actress = [],
+      code,
+      imgUrl,
+      duration,
+      resolution; // 仅在作品页生效
+
+  if (url.includes('https://www.mousouzoku-av.com/works/detail/')) {
+    // 页面数据列表
+    let infoList = document.querySelectorAll('dl.bx-info > dd'); // let keyList = document.querySelectorAll('dl.info > dt')
+    // keyList 是 NodeList，不是数组，先转换为数组，再取出其值
+    // keyList = Array.from(keyList)
+
+    console.log('数据列表', infoList); // 厂商名
+
+    makerName = infoList[0].innerText;
+    console.log('厂商名', makerName); // 作品名
+
+    workName = document.querySelector('h1.ttl-works').innerText;
+    console.log('作品名', workName); // 系列名
+    // seriesName = infoList[3].querySelector('span').innerText === 'シリーズ' ? infoList[3].querySelector('span:last-child').innerText : undefined
+    // console.log('系列名', seriesName)
+    // 日期
+
+    date = infoList[2].innerText;
+    console.log('日期', date); // 演员列表
+
+    let aList = infoList[3].querySelectorAll('li');
+    aList.forEach(a => actress.push(a.innerText));
+    console.log('演员列表', actress); // 番号
+
+    code = infoList[5].innerText;
+    console.log('番号', code); // 封面地址
+
+    imgUrl = document.querySelector('.tmb-img').href; // imgUrl = `https://www.caribbeancom.com${imgUrl.replace('url("', '').replace('")', '')}`
+    // 跨域获取
+    // const res = await fetch(imgUrl)
+    // try {
+    //     const blob = await res.blob()
+    //     imgUrl = window.URL.createObjectURL(blob)
+    // } catch (e) {
+    //     console.log('下载图片失败', e)
+    // }
+
+    console.log('封面地址', imgUrl); // 时长
+    // duration = infoList[2].querySelector('span:last-child').innerText
+    // duration = duration.replace(/^00:/, '').replaceAll(':', '.')
+    // console.log('时长', duration)
+    // 清晰度和大小
+    // resolution = 
+    // console.log('清晰度', resolution)
+    // console.log('大小', '格式',)
+
+    let av = {
+      makerName: makerName,
+      workName: workName,
+      seriesName: seriesName,
+      date: date,
+      actress: actress,
+      code: code,
+      imgUrl: imgUrl,
+      duration: duration,
+      resolution: resolution
+    };
+    console.log('传出 AV 对象', av);
+    return av;
+  }
+}
 ;// CONCATENATED MODULE: ./src/index.ts
+
 
 
 
@@ -1103,61 +1181,57 @@ async function main() {
   let domain = document.domain,
       url = document.URL,
       av = {};
-  console.log('域名', domain, url);
+  console.log("域名", domain, url);
 
   async function trySwitch() {
     switch (domain) {
       // ----- CA 集团厂商 -----
-      case 'madonna-av.com':
-      case 's1s1s1.com':
-      case 'moodyz.com':
-      case 'honnaka.jp':
-      case 'ideapocket.com':
-      case 'attackers.net':
-      case 'premium-beauty.com':
-      case 'mvg.jp':
+      case "madonna-av.com":
+      case "s1s1s1.com":
+      case "moodyz.com":
+      case "honnaka.jp":
+      case "ideapocket.com":
+      case "attackers.net":
+      case "premium-beauty.com":
+      case "mvg.jp":
         av = await CA(url);
         break;
 
-      case 'www.naughtyamerica.com':
+      case "www.naughtyamerica.com":
         try {
           av = await NA(url);
         } catch {}
 
-        ;
         break;
 
-      case 'www.1pondo.tv':
+      case "www.1pondo.tv":
         try {
           av = await OnePondo(url);
         } catch {}
 
-        ;
         break;
 
-      case 'www.prestige-av.com':
+      case "www.prestige-av.com":
         try {
           av = await Prestige(url);
         } catch {}
 
-        ;
         break;
 
-      case 'my.tokyo-hot.com':
+      case "my.tokyo-hot.com":
         try {
           av = await TokyoHot(url);
         } catch {}
 
-        ;
         break;
 
-      case 'www.brazzers.com':
+      case "www.brazzers.com":
         try {
           setTimeout(async () => {
             av = await Brazzers(url);
 
             if (av) {
-              console.log('AV对象', av);
+              console.log("AV对象", av);
 
               try {
                 a.download = await final_final(av);
@@ -1167,48 +1241,54 @@ async function main() {
           }, 2000);
         } catch (e) {}
 
-        ;
         break;
 
-      case 'www.caribbeancom.com':
+      case "www.caribbeancom.com":
         try {
           av = await Caribbean(url);
         } catch {}
 
-        ;
         break;
 
-      case 'ec.sod.co.jp':
+      case "ec.sod.co.jp":
         try {
           av = await SOD(url);
         } catch {}
 
-        ;
         break;
 
-      case 'www.mgstage.com':
+      case "www.mgstage.com":
         try {
           av = await MGS(url);
         } catch {}
 
-        ;
+        break;
+
+      case "www.mousouzoku-av.com":
+        try {
+          av = await Mousouzoku(url);
+        } catch {}
+
         break;
     }
   }
 
   trySwitch().then(async () => {
     if (av) {
-      console.log('AV对象', av);
+      console.log("AV对象", av);
 
       try {
-        a.download = 'test';
         a.download = await final_final(av);
         a.href = av.imgUrl;
+        console.log("自动保存开关", localStorage.getItem("autoSave"));
+
+        if (localStorage.getItem("autoSave") === "yes") {
+          console.log("自动保存");
+          a.click();
+        }
       } catch (e) {}
     }
-  }); // if (autoSave === 'yes') {
-  // 	a.click();
-  // }
+  });
 }
 
 window.onload = async () => {
