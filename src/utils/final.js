@@ -18,7 +18,6 @@ export default async function final(avObj) {
   let av = JSON.parse(JSON.stringify(avObj));
   let finalName;
   console.log("传入的 AV 对象", av);
-  debugger;
   if (av.code) {
     // ---------- 日本作品，有番号 ----------
     // ----- 处理演员名 -----
@@ -29,13 +28,11 @@ export default async function final(avObj) {
 
     // ----- 处理系列名 -----
     if (av && av.seriesName) {
-      console.log("***** 系列作品 *****");
       av.seriesName = av.seriesName.trim();
 
-      // 是否包含编号标识
-      const numType1 = checkIndicator(av.workName);
-      // 是否包含纯数字
-      const numType2 = checkDigit(av.workName, av.seriesName);
+      const numType1 = checkIndicator(av.workName); // 是否包含编号标识
+      const numType2 = checkDigit(av.workName, av.seriesName); // 是否包含纯数字
+
       if (numType1 || (!numType1 && numType2)) {
         // 包含编号标识 / 不包含编号标识但包含纯数字：
         // 系列名（日期）编号部分（番号）演员名
