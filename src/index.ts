@@ -16,10 +16,10 @@ async function main() {
   let a = createBtn();
 
   // 核心功能
-  let domain = document.domain,
-    url = document.URL,
-    av: any = {};
-  console.log("域名", domain, url);
+  const domain = document.domain;
+  const url = document.URL;
+  let av: any = {};
+
   async function trySwitch() {
     switch (domain) {
       // ----- CA 集团厂商 -----
@@ -58,7 +58,6 @@ async function main() {
           setTimeout(async () => {
             av = await Brazzers(url);
             if (av) {
-              console.log("AV对象", av);
               try {
                 a.download = await final(av);
                 a.href = av.imgUrl;
@@ -92,14 +91,11 @@ async function main() {
 
   trySwitch().then(async () => {
     if (av) {
-      console.log("AV对象", av);
       try {
         a.download = await final(av);
         a.href = av.imgUrl;
 
-        console.log("自动保存开关", localStorage.getItem("autoSave"));
         if (localStorage.getItem("autoSave") === "yes") {
-          console.log("自动保存");
           a.click();
         }
       } catch (e) {}
@@ -110,7 +106,5 @@ async function main() {
 window.onload = async () => {
   try {
     await main();
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 };
