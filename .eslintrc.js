@@ -15,5 +15,7 @@ module.exports = {
   plugins: ["@typescript-eslint"],
   rules: {
     "no-empty": "off",
+    "no-console": "error",
+    "no-debugger": "warn",
   },
 };
