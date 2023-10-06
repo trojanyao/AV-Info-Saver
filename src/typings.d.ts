@@ -8,4 +8,5 @@ export interface AVWork {
   actress: string[]; // 女优
   code: string; // 番号
   imgUrl: string; // 封面图片地址
+  duration?: string; // 时长
 }
