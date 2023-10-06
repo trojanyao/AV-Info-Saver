@@ -1,40 +1,40 @@
-import { createBtn } from "./create-btn";
-import final from "./utils/final";
+import { createBtn } from './create-btn'
+import final from './utils/final'
 
 /* ===== Makers ===== */
-import CA from "./makers/ca_group";
-import { NA } from "./makers/naughty-america";
-import { OnePondo } from "./makers/1pondo";
-import Prestige from "./makers/prestige";
-import TokyoHot from "./makers/tokyo-hot";
-import Brazzers from "./makers/brazzers";
-import Caribbean from "./makers/caribbean";
-import SOD from "./makers/sod";
-import MGS from "./makers/mgstage";
-import Mousouzuku from "./makers/mousouzoku";
+import CA from './makers/ca_group'
+import { NA } from './makers/naughty-america'
+import { OnePondo } from './makers/1pondo'
+import Prestige from './makers/prestige'
+import TokyoHot from './makers/tokyo-hot'
+import Brazzers from './makers/brazzers'
+import Caribbean from './makers/caribbean'
+import SOD from './makers/sod'
+import MGS from './makers/mgstage'
+import Mousouzuku from './makers/mousouzoku'
 
 window.onload = async () => {
-  await main();
-};
+  await main()
+}
 
 async function main() {
-  const a = createBtn(); // 创建按钮
+  const a = createBtn() // 创建按钮
 
-  const domain = document.domain;
-  const url = document.URL;
-  let av: any = {};
+  const domain = document.domain
+  const url = document.URL
+  let av: any = {}
 
   trySwitch(domain, url, av, a).then(async () => {
     if (av) {
-      a.download = await final(av);
-      a.href = av.imgUrl;
+      a.download = await final(av)
+      a.href = av.imgUrl
 
       // 自动保存开启
-      if (localStorage.getItem("autoSave") === "yes") {
-        a.click();
+      if (localStorage.getItem('autoSave') === 'yes') {
+        a.click()
       }
     }
-  });
+  })
 }
 
 /**
@@ -47,61 +47,62 @@ async function main() {
 async function trySwitch(domain: string, url: string, av: any, a: any) {
   switch (domain) {
     /* ========== 无码 ========== */
-    case "www.1pondo.tv":
-      av = await OnePondo(url);
-      break;
-    case "www.caribbeancom.com":
-      av = await Caribbean(url);
-      break;
-    case "my.tokyo-hot.com":
-      av = await TokyoHot(url);
-      break;
+    case 'www.1pondo.tv':
+      av = await OnePondo(url)
+      break
+    case 'www.caribbeancom.com':
+      av = await Caribbean(url)
+      break
+    case 'my.tokyo-hot.com':
+      av = await TokyoHot(url)
+      break
 
     /* ========== 有码 ========== */
     // CA 集团
-    case "madonna-av.com":
-    case "s1s1s1.com":
-    case "moodyz.com":
-    case "honnaka.jp":
-    case "ideapocket.com":
-    case "attackers.net":
-    case "premium-beauty.com":
-    case "mvg.jp":
-      av = await CA(url);
-      break;
-    case "www.mousouzoku-av.com":
-      av = await Mousouzuku(url);
-      break;
+    case 'madonna-av.com':
+    case 's1s1s1.com':
+    case 'moodyz.com':
+    case 'honnaka.jp':
+    case 'ideapocket.com':
+    case 'attackers.net':
+    case 'premium-beauty.com':
+    case 'mvg.jp':
+      av = await CA(url)
+      break
+    case 'www.mousouzoku-av.com':
+      av = await Mousouzuku(url)
+      break
 
     // SOD 集团
-    case "ec.sod.co.jp":
-      av = await SOD(url);
-      break;
+    case 'ec.sod.co.jp':
+      av = await SOD(url)
+      break
 
     // Prestige 集团
-    case "www.prestige-av.com":
-      av = await Prestige(url);
-      break;
+    case 'www.prestige-av.com':
+      av = await Prestige(url)
+      break
 
     /* ========== 欧美 ========== */
-    case "www.brazzers.com":
+    case 'www.brazzers.com':
       setTimeout(async () => {
-        av = await Brazzers(url);
+        av = await Brazzers(url)
         if (av) {
-          try {
-            a.download = await final(av);
-            a.href = av.imgUrl;
-          } catch (e) {}
+          a.download = await final(av)
+          a.href = av.imgUrl
         }
-      }, 2000);
-      break;
-    case "www.naughtyamerica.com":
-      av = await NA(url);
-      break;
+      }, 10000)
+      break
+    case 'www.naughtyamerica.com':
+      av = await NA(url)
+      break
 
     /* ========== 素人 ========== */
-    case "www.mgstage.com":
-      av = await MGS(url);
-      break;
+    case 'www.mgstage.com':
+      av = await MGS(url)
+      break
+
+    default:
+      break
   }
 }

@@ -1,26 +1,26 @@
-import { datify } from "./datify"
-import { codify } from "./codify"
-import { refineTitle } from "./refine-title"
-import { refineActress } from "./refine-actress"
-import { checkIndicator } from "./check-indicator"
-import { checkDigit } from "./check-digit"
-import { AVWork } from "../typings"
+import { datify } from './datify'
+import { codify } from './codify'
+import { refineTitle } from './refine-title'
+import { refineActress } from './refine-actress'
+import { checkIndicator } from './check-indicator'
+import { checkDigit } from './check-digit'
+import { AVWork } from '../typings'
 
 /* 编号在前的系列 */
 const DIGIT_FIRST_SERIES = [
   // ===== 无码 =====
   // 加勒比
-  "新入社員のお仕事",
-  "社長秘書のお仕事",
+  '新入社員のお仕事',
+  '社長秘書のお仕事',
 
   // ===== 有码 =====
   // Prestige
-  "職女。",
+  '職女。',
 
   // ===== 欧美 =====
 
   // ===== 素人 =====
-  "ラグジュTV",
+  'ラグジュTV',
 ]
 
 /**
@@ -69,7 +69,7 @@ export default async function final(avObj: AVWork): Promise<string> {
         }
 
         /* tempName + <演员>（<番号>）[<素人演员真实姓名>] */
-        finalName = `${finalName}${av.actress}（${av.code}）${av.actressRealName || ""}`
+        finalName = `${finalName}${av.actress}（${av.code}）${av.actressRealName || ''}`
       } else {
         /**
          * 不含编号
@@ -88,21 +88,21 @@ export default async function final(avObj: AVWork): Promise<string> {
     }
 
     finalName = `【${av.makerName}】${finalName}${
-      av.duration ? (av.resolution ? `[${av.duration}; ${av.resolution}]` : `[${av.duration}]`) : ""
+      av.duration ? (av.resolution ? `[${av.duration}; ${av.resolution}]` : `[${av.duration}]`) : ''
     }.jpg`
     return finalName
   }
 
   /* ========== 欧美作品，无番号 ========== */
   // 替换半角冒号
-  av.workName = av.workName.replace(": ", "-")
+  av.workName = av.workName?.replace(': ', '-')
   const newActress = []
   for (const a of av.actress) {
     await newActress.push(a.toLowerCase().replace(/\b(\w)|\s(\w)/g, (s) => s.toUpperCase()))
   }
 
-  finalName = `【${av.makerName}】${av.seriesName || ""}（${datify(av.date)}）${newActress.join(
-    ", "
-  )} - ${av.workName}${av.duration ? `[${av.duration}; ${av.resolution.join(", ")}]` : ""}.jpg`
+  finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(
+    ', '
+  )} - ${av.workName}${av.duration ? `[${av.duration}; ${av.resolution.join(', ')}]` : ''}.jpg`
   return finalName
 }
