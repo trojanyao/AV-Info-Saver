@@ -7,7 +7,7 @@ export interface AVWork {
   date: string // 发布日期
   actress: string | string[] // 女优
   actressRealName?: string // 素人女优的真实姓名
-  code: string // 番号
+  code?: string // 番号
   imgUrl: string // 封面图片地址
   duration?: string // 时长
   resolution?: string[] // 清晰度
