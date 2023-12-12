@@ -1,4 +1,4 @@
-declare module "*.less"
+declare module '*.less'
 
 export interface AVWork {
   makerName: string // 厂商名
