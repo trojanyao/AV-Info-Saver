@@ -22,19 +22,18 @@ async function main() {
 
   const domain = document.domain
   const url = document.URL
-  let av: any = {}
 
-  trySwitch(domain, url, av, a).then(async () => {
-    if (av) {
-      a.download = await final(av)
-      a.href = av.imgUrl
+  const av: any = await trySwitch(domain, url)
 
-      // 自动保存开启
-      if (localStorage.getItem('autoSave') === 'yes') {
-        a.click()
-      }
+  if (av) {
+    a.download = await final(av)
+    a.href = av.imgUrl
+
+    // 自动保存开启
+    if (localStorage.getItem('autoSave') === 'yes') {
+      a.click()
     }
-  })
+  }
 }
 
 /**
@@ -44,7 +43,9 @@ async function main() {
  * @param av AV对象
  * @param a 生成的按钮
  */
-async function trySwitch(domain: string, url: string, av: any, a: any) {
+async function trySwitch(domain: string, url: string) {
+  let av: any = {}
+
   switch (domain) {
     /* ========== 无码 ========== */
     case 'www.1pondo.tv':
@@ -85,13 +86,8 @@ async function trySwitch(domain: string, url: string, av: any, a: any) {
 
     /* ========== 欧美 ========== */
     case 'www.brazzers.com':
-      setTimeout(async () => {
-        av = await Brazzers(url)
-        if (av) {
-          a.download = await final(av)
-          a.href = av.imgUrl
-        }
-      }, 10000)
+      await sleep(5000)
+      av = await Brazzers()
       break
     case 'www.naughtyamerica.com':
       av = await NA(url)
@@ -105,4 +101,11 @@ async function trySwitch(domain: string, url: string, av: any, a: any) {
     default:
       break
   }
+
+  return av
+}
+
+// 代码暂停执行
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
