@@ -1,42 +1,26 @@
 import { AVWork } from '../typings'
 
-export default async function Brazzers(url: string) {
-  // 定义页面元素
-  let workName,
-    seriesName,
-    date,
-    actress: string[] = [],
-    code,
-    imgUrl
-
-  // 仅在作品页生效
-  if (!url.includes('https://www.brazzers.com/video/')) {
-    return
-  }
-
-  /* === 页面数据列表 === */
-  let info = document.querySelector(
-    '#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div > div'
+export default async function Brazzers() {
+  // 信息容器
+  const infoDiv = document.querySelector(
+    '#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div > div > div > section > div > div'
   )
 
-  /* === 作品名 === */
-  workName = info.querySelector('h2').innerText
+  // 作品名
+  const workName: string = (infoDiv?.querySelector('h2.font-secondary') as HTMLElement)?.innerText
 
-  // 系列名
-  // seriesName =
-  // console.log('系列名', seriesName)
-
-  /* === 日期 === */
-  date = new Date(
-    (document.querySelector('h2').previousElementSibling as HTMLElement).innerText
+  // 日期
+  const date: string = new Date(
+    (infoDiv?.querySelector('div:nth-child(2)') as HTMLElement)?.innerText
   ).toLocaleDateString('zh-CN')
 
-  /* === 演员列表 === */
-  let aList = document.querySelectorAll('h2 + div > span')
-  aList.forEach((a) => actress.push((a as HTMLElement).innerText.replace(', ', '')))
+  // 演员列表
+  const actress: string[] = infoDiv?.querySelectorAll('div')?.[3]?.innerText?.split(', ') || []
 
   /* === 封面地址 === */
-  imgUrl = ((document.querySelector('video + div') as HTMLElement).style as any)['background-image']
+  let imgUrl = ((document.querySelector('video + div') as HTMLElement).style as any)[
+    'background-image'
+  ]
   imgUrl = imgUrl.match(/"(\S+)"/)?.[1]
   // 跨域获取
   const res = await fetch(imgUrl)
@@ -46,10 +30,9 @@ export default async function Brazzers(url: string) {
   const av: AVWork = {
     makerName: 'Brazzers',
     workName,
-    seriesName,
+    seriesName: '系列名待补充',
     date,
     actress,
-    code,
     imgUrl,
   }
   return av
