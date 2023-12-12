@@ -23,7 +23,7 @@ module.exports = {
 		'https://www.1pondo.tv/*',
 		'https://www.prestige-av.com/*',
 		'https://*.tokyo-hot.com/*',
-		'https://www.brazzers.com/*',
+		'https://*.brazzers.com/video/*',
 		'https://www.caribbeancom.com/*',
 		'https://ec.sod.co.jp/*',
 		'https://www.mgstage.com/*',
