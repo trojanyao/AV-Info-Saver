@@ -98,7 +98,7 @@ export default async function final(avObj: AVWork): Promise<string> {
   av.workName = av.workName?.replace(': ', '-')
   const newActress = []
   for (const a of av.actress) {
-    await newActress.push(a.toLowerCase().replace(/\b(\w)|\s(\w)/g, (s) => s.toUpperCase()))
+    newActress.push(a.toLowerCase().replace(/\b(\w)|\s(\w)/g, (s) => s.toUpperCase()))
   }
 
   finalName = `【${av.makerName}】${av.seriesName || ''}（${datify(av.date)}）${newActress.join(
