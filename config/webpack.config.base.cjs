@@ -4,7 +4,10 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const webpackConfig = {
   resolve: {
-    extensions: ['.js', '.ts']
+    extensions: ['.js', '.ts'],
+    alias: {
+      '@': path.resolve(__dirname, '../src'),
+    },
   },
   optimization: {
     minimize: false,

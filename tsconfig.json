@@ -6,6 +6,11 @@
     "moduleResolution": "Node",
     "module": "ESNext",
     "target": "ES2021",
-    "allowJs": true
-  }
+    "allowJs": true,
+    "paths": {
+      "@/*": ["./src/*"],
+    },
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
