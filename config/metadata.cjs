@@ -8,6 +8,9 @@ module.exports = {
   source: repository.url,
   // 'license': 'MIT',
   match: [
+    /* ========== 无码厂商 ========== */
+    'https://*.1pondo.tv/movies/*',
+
     // CA 集团厂商
     'https://madonna-av.com/*',
     'https://s1s1s1.com/*',
@@ -20,7 +23,6 @@ module.exports = {
     'https://www.mousouzoku-av.com/*',
     // 欧美
     'https://www.naughtyamerica.com/*',
-    'https://www.1pondo.tv/*',
     'https://www.prestige-av.com/*',
     'https://*.tokyo-hot.com/*',
     'https://*.brazzers.com/video/*',

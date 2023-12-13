@@ -26,7 +26,7 @@ async function main() {
   const av: any = await trySwitch(domain, url)
 
   if (av) {
-    a.download = await final(av)
+    a.download = av.finalName
     a.href = av.imgUrl
 
     // 自动保存开启
@@ -49,7 +49,7 @@ async function trySwitch(domain: string, url: string) {
   switch (domain) {
     /* ========== 无码 ========== */
     case 'www.1pondo.tv':
-      av = await OnePondo(url)
+      av = await OnePondo()
       break
     case 'www.caribbeancom.com':
       av = await Caribbean(url)
