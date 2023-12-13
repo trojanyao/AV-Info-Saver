@@ -1,5 +1,5 @@
 // 编号标识列表
-const INDICATORS = ['vol', 'Vol', 'VOL', 'Case', 'FILE', 'Talk', 'パート']
+const INDICATORS = ['vol', 'Vol', 'VOL', 'Case', 'File', 'FILE', 'Talk', 'パート']
 
 /**
  * 检测系列作品的标题中是否包含有标识的编号
