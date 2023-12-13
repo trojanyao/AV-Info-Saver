@@ -8,7 +8,7 @@ import { AVWork } from '../typings'
  * @param {AVWork} av 未处理的 AV 对象
  * @returns {AVWork} 处理后的 AV 对象
  */
-export function refineActress(av: AVWork) {
+export function refineActress(av: AVWork): AVWork {
   av.actress = (av.actress as string[]).map((a) => {
     // 先剔除头尾空格
     let newA = a.trim()
