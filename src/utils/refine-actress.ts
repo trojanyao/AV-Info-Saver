@@ -20,6 +20,5 @@ export function refineActress(av: AVWork): AVWork {
     return newA
   })
 
-  av.actress = (av.actress as string[]).join(' ')
   return av
 }
