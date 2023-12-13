@@ -8,8 +8,11 @@ module.exports = {
   source: repository.url,
   // 'license': 'MIT',
   match: [
-    /* ========== 无码厂商 ========== */
+    /* ========== 无码 ========== */
     'https://*.1pondo.tv/movies/*',
+
+    /* ========== 欧美 ========== */
+    'https://*.brazzers.com/video/*',
 
     // CA 集团厂商
     'https://madonna-av.com/*',
@@ -25,7 +28,6 @@ module.exports = {
     'https://www.naughtyamerica.com/*',
     'https://www.prestige-av.com/*',
     'https://*.tokyo-hot.com/*',
-    'https://*.brazzers.com/video/*',
     'https://www.caribbeancom.com/*',
     'https://ec.sod.co.jp/*',
     'https://www.mgstage.com/*',

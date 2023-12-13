@@ -1,4 +1,4 @@
-import { AVWork } from '../typings'
+import { AVWork } from '@/typings'
 
 export default async function Brazzers() {
   // 信息容器
@@ -10,17 +10,13 @@ export default async function Brazzers() {
   const workName: string = (infoDiv?.querySelector('h2.font-secondary') as HTMLElement)?.innerText
 
   // 日期
-  const date: string = new Date(
-    (infoDiv?.querySelector('div:nth-child(2)') as HTMLElement)?.innerText
-  ).toLocaleDateString('zh-CN')
+  const date: string = new Date((infoDiv?.querySelector('div:nth-child(2)') as HTMLElement)?.innerText).toLocaleDateString('zh-CN')
 
   // 演员列表
   const actress: string[] = infoDiv?.querySelectorAll('div')?.[3]?.innerText?.split(', ') || []
 
-  /* === 封面地址 === */
-  let imgUrl = ((document.querySelector('video + div') as HTMLElement).style as any)[
-    'background-image'
-  ]
+  // 封面地址
+  let imgUrl = ((document.querySelector('video + div') as HTMLElement).style as any)['background-image']
   imgUrl = imgUrl.match(/"(\S+)"/)?.[1]
   // 跨域获取
   const res = await fetch(imgUrl)
@@ -35,5 +31,18 @@ export default async function Brazzers() {
     actress,
     imgUrl,
   }
-  return av
+  return { ...av, finalName: final(av) }
+}
+
+import { datify } from '@/utils/datify'
+
+/**
+ * 拼接最终文件名
+ */
+function final(av: AVWork) {
+  //【厂商】（日期）演员 - 作品名
+  av.seriesName = av.seriesName.trim()
+  const finalName: string = `${av.seriesName}（${datify(av.date)}）${av.actress.join(', ')} - ${av.workName}`
+
+  return `【${av.makerName}】${finalName}.jpg`
 }
