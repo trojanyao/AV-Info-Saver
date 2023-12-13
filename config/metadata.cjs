@@ -10,6 +10,7 @@ module.exports = {
   match: [
     /* ========== 无码 ========== */
     'https://*.1pondo.tv/movies/*',
+    'https://*.caribbeancom.com/moviepages/*',
 
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
@@ -28,7 +29,6 @@ module.exports = {
     'https://www.naughtyamerica.com/*',
     'https://www.prestige-av.com/*',
     'https://*.tokyo-hot.com/*',
-    'https://www.caribbeancom.com/*',
     'https://ec.sod.co.jp/*',
     'https://www.mgstage.com/*',
   ],

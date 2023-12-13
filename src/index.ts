@@ -53,7 +53,7 @@ async function trySwitch(domain: string, url: string) {
       av = await OnePondo()
       break
     case 'www.caribbeancom.com':
-      av = await Caribbean(url)
+      av = await Caribbean()
       break
     case 'my.tokyo-hot.com':
       av = await TokyoHot(url)
