@@ -14,3 +14,8 @@ export function post<T = any, R = AxiosResponse<T>> (url: string, data?: any, co
     ...config
   })
 }
+
+// 代码暂停执行
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

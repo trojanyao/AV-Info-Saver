@@ -1,4 +1,5 @@
 import { createBtn } from './create-btn'
+import { sleep } from './utils'
 import final from './utils/final'
 
 /* ===== Makers ===== */
@@ -103,9 +104,4 @@ async function trySwitch(domain: string, url: string) {
   }
 
   return av
-}
-
-// 代码暂停执行
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
 }
