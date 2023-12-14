@@ -15,6 +15,9 @@ module.exports = {
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
 
+    /* ========== 素人 ========== */
+    'https://*.mgstage.com/product/product_detail/*',
+
     // CA 集团厂商
     'https://madonna-av.com/*',
     'https://s1s1s1.com/*',
@@ -30,7 +33,6 @@ module.exports = {
     'https://www.prestige-av.com/*',
     'https://*.tokyo-hot.com/*',
     'https://ec.sod.co.jp/*',
-    'https://www.mgstage.com/*',
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,

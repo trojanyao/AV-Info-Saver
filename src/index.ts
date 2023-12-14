@@ -96,7 +96,7 @@ async function trySwitch(domain: string, url: string) {
 
     /* ========== 素人 ========== */
     case 'www.mgstage.com':
-      av = await MGS(url)
+      av = await MGS()
       break
 
     default:
