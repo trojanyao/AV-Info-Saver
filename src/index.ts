@@ -91,7 +91,7 @@ async function trySwitch(domain: string, url: string) {
       av = await Brazzers()
       break
     case 'www.naughtyamerica.com':
-      av = await NA(url)
+      av = await NA()
       break
 
     /* ========== 素人 ========== */

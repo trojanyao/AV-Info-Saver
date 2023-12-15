@@ -19,6 +19,7 @@ module.exports = {
 
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
+    'https://*.naughtyamerica.com/scene/*',
 
     /* ========== 素人 ========== */
     'https://*.mgstage.com/product/product_detail/*',
@@ -31,7 +32,6 @@ module.exports = {
     'https://mvg.jp/*',
     'https://www.mousouzoku-av.com/*',
     // 欧美
-    'https://www.naughtyamerica.com/*',
     'https://www.prestige-av.com/*',
     'https://*.tokyo-hot.com/*',
     'https://ec.sod.co.jp/*',
