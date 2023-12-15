@@ -1,6 +1,5 @@
 import { createBtn } from './create-btn'
 import { sleep } from './utils'
-import final from './utils/final'
 
 /* ===== Makers ===== */
 import CA from './makers/ca-group'
@@ -29,6 +28,9 @@ async function main() {
   if (av) {
     a.download = av.finalName
     a.href = av.imgUrl
+
+    // eslint-disable-next-line
+    console.log(a.download)
 
     // 自动保存开启
     if (localStorage.getItem('autoSave') === 'yes') {
