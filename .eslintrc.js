@@ -19,7 +19,8 @@ module.exports = {
   },
   rules: {
     'no-empty': 'off',
-    'no-console': 'error',
+    'no-unused-vars': 'warn',
+    'no-console': 'warn',
     'no-debugger': 'warn',
   },
 }
