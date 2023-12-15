@@ -5,7 +5,7 @@
  * @param {string} date 未处理的日期字符串
  * @returns {string} 处理后的标准日期格式
  */
-export function datify(date: string) {
+export function datify(date: string): string {
   let newDate
 
   // 符合标准格式：直接返回
@@ -26,8 +26,6 @@ export function datify(date: string) {
   let year = date.match(/(\d{4})年/)[1]
   let month = date.match(/(\d{1,2})月/)[1]
   let day = date.match(/(\d{1,2})日/)[1]
-  newDate = `${year}.${month.length === 1 ? '0' + month : month}.${
-    day.length === 1 ? '0' + day : day
-  }`
+  newDate = `${year}.${month.length === 1 ? '0' + month : month}.${day.length === 1 ? '0' + day : day}`
   return newDate
 }
