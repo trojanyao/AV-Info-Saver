@@ -10,5 +10,5 @@ export interface AVWork {
   code?: string // 番号
   imgUrl: string // 封面图片地址
   duration?: string // 时长
-  resolution?: string[] // 清晰度
+  resolutions?: string[] // 清晰度
 }
