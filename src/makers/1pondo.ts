@@ -8,7 +8,7 @@ export async function OnePondo() {
   const showInfo = document.querySelector('button.see-more') as HTMLElement
   await showInfo.click()
 
-  // 页面数据列表
+  // 作品详情列表
   const infoList = [...(document.querySelectorAll('.movie-detail > ul > li') || [])]
   /**
    * 从详情列表中查找返回对应信息
@@ -85,10 +85,14 @@ function final(av: AVWork) {
 
       if (digitFirstSeries) {
         // 系列编号在前：【厂商】系列名 编号（日期）演员名（番号）[时长]
-        finalName = `${av.seriesName} ${numType1 || numType2}（${datify(av.date)}）${av.actress}（${av.code}）[${av.duration}]`
+        finalName = `${av.seriesName} ${numType1 || numType2}（${datify(av.date)}）${av.actress}（${av.code}）[${
+          av.duration
+        }]`
       } else {
         // 系列编号在后：【厂商】系列名（日期）编号（番号）演员名 [时长]
-        finalName = `${av.seriesName}（${datify(av.date)}）${numType1 || numType2}（${av.code}）${av.actress} [${av.duration}]`
+        finalName = `${av.seriesName}（${datify(av.date)}）${numType1 || numType2}（${av.code}）${av.actress} [${
+          av.duration
+        }]`
       }
     } else {
       /* 不含编号标识：【厂商】系列名（日期）演员名（番号）[时长] */
