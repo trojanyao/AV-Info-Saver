@@ -3,7 +3,7 @@ import { sleep } from './utils'
 import final from './utils/final'
 
 /* ===== Makers ===== */
-import CA from './makers/ca_group'
+import CA from './makers/ca-group'
 import { NA } from './makers/naughty-america'
 import { OnePondo } from './makers/1pondo'
 import Prestige from './makers/prestige'
@@ -69,7 +69,7 @@ async function trySwitch(domain: string, url: string) {
     case 'attackers.net':
     case 'premium-beauty.com':
     case 'mvg.jp':
-      av = await CA(url)
+      av = await CA()
       break
     case 'www.mousouzoku-av.com':
       av = await Mousouzuku(url)

@@ -12,6 +12,9 @@ module.exports = {
     'https://*.1pondo.tv/movies/*',
     'https://*.caribbeancom.com/moviepages/*',
 
+    /* ========== 有码 ========== */
+    'https://*.attackers.net/works/detail/*',
+
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
 
@@ -24,7 +27,6 @@ module.exports = {
     'https://moodyz.com/*',
     'https://honnaka.jp/*',
     'https://ideapocket.com/*',
-    'https://attackers.net/*',
     'https://premium-beauty.com/*',
     'https://mvg.jp/*',
     'https://www.mousouzoku-av.com/*',
