@@ -21,7 +21,7 @@ window.onload = async () => {
 async function main() {
   const a = createBtn() // 创建按钮
 
-  const domain = document.domain
+  const domain = window.location.host
   const url = document.URL
 
   const av: any = await trySwitch(domain, url)
