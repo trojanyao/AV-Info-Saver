@@ -13,9 +13,9 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint'],
-  global: {
-    require,
-    module,
+  globals: {
+    require: 'readonly',
+    module: 'readonly',
   },
   rules: {
     'no-empty': 'off',
