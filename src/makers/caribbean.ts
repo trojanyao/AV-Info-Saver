@@ -1,9 +1,6 @@
 import { type AVWork } from '../typings'
 
 export default async function Caribbean() {
-  // 定义页面元素
-  let resolution
-
   // 封面地址
   const bgImg: string = (document.querySelector('.vjs-poster') as HTMLElement)?.style?.backgroundImage
   const imgUrl: string = `https://www.caribbeancom.com${bgImg.match(/"\S+"/)?.[0]?.replaceAll('"', '')}`
@@ -86,10 +83,14 @@ function final(av: AVWork) {
 
       if (digitFirstSeries) {
         // 系列编号在前：【厂商】系列名 编号（日期）演员名（番号）[时长]
-        finalName = `${av.seriesName} ${numType1 || numType2}（${datify(av.date)}）${actressString}（${av.code}）[${av.duration}]`
+        finalName = `${av.seriesName} ${numType1 || numType2}（${datify(av.date)}）${actressString}（${av.code}）[${
+          av.duration
+        }]`
       } else {
         // 系列编号在后：【厂商】系列名（日期）编号（番号）演员名 [时长]
-        finalName = `${av.seriesName}（${datify(av.date)}）${numType1 || numType2}（${av.code}）${actressString} [${av.duration}]`
+        finalName = `${av.seriesName}（${datify(av.date)}）${numType1 || numType2}（${av.code}）${actressString} [${
+          av.duration
+        }]`
       }
     } else {
       /* 不含编号标识：【厂商】系列名（日期）演员名（番号）[时长] */
