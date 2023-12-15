@@ -14,6 +14,7 @@ module.exports = {
 
     /* ========== 有码 ========== */
     'https://*.attackers.net/works/detail/*',
+    'https://*.ideapocket.com/works/detail/*',
 
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
@@ -26,7 +27,6 @@ module.exports = {
     'https://s1s1s1.com/*',
     'https://moodyz.com/*',
     'https://honnaka.jp/*',
-    'https://ideapocket.com/*',
     'https://premium-beauty.com/*',
     'https://mvg.jp/*',
     'https://www.mousouzoku-av.com/*',
