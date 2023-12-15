@@ -15,6 +15,7 @@ module.exports = {
     /* ========== 有码 ========== */
     'https://*.attackers.net/works/detail/*',
     'https://*.ideapocket.com/works/detail/*',
+    'https://*.madonna-av.com/works/detail/*',
 
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
@@ -23,7 +24,6 @@ module.exports = {
     'https://*.mgstage.com/product/product_detail/*',
 
     // CA 集团厂商
-    'https://madonna-av.com/*',
     'https://s1s1s1.com/*',
     'https://moodyz.com/*',
     'https://honnaka.jp/*',
