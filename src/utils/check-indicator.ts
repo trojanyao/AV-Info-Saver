@@ -1,5 +1,5 @@
 // 编号标识列表
-const INDICATORS = ['vol', 'Vol', 'VOL', 'Case', 'File', 'FILE', 'Talk', 'パート']
+const INDICATORS = ['vol', 'Vol', 'VOL', 'Case.', 'File', 'FILE', 'Talk', 'パート']
 
 /**
  * 检测系列作品的标题中是否包含有标识的编号
@@ -9,16 +9,14 @@ const INDICATORS = ['vol', 'Vol', 'VOL', 'Case', 'File', 'FILE', 'Talk', 'パー
  */
 export function checkIndicator(workName: string): string | undefined {
   // 是否包含编号标识
-  const indicatorIndex = INDICATORS.findIndex((d) => workName.includes(d))
+  const indicator = INDICATORS.find((d) => workName.includes(d))
 
-  if (indicatorIndex > -1) {
+  if (indicator) {
     // 包含编号标识：返回标识和编号部分
 
-    // 标识类型
-    let indicator = INDICATORS[indicatorIndex]
-
     // 标识符和编号部分
-    const num = workName.match(new RegExp(indicator + '[\\S\\s]*\\d+'))?.[0]
+    const regExp = new RegExp(indicator + '\\s{0,3}\\d+')
+    const num = workName.match(regExp)?.[0]
 
     return num
   }
