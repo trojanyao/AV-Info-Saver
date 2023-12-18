@@ -100,7 +100,7 @@ function final(av: AVWork) {
 
       if (digitFirstSeries) {
         // 系列编号在前：【厂商】系列名 编号（日期）演员名（番号）[时长]
-        finalName = `${av.seriesName} ${numType1 || numType2}（${datify(av.date)}）${actressString}（${av.code}`
+        finalName = `${av.seriesName} ${numType1 || numType2}（${datify(av.date)}）${actressString}（${av.code}）`
       } else {
         // 系列编号在后：【厂商】系列名（日期）编号（番号）演员名 [时长]
         finalName = `${av.seriesName}（${datify(av.date)}）${numType1 || numType2}（${av.code}）${actressString}`
