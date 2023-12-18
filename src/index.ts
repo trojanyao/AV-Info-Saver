@@ -63,14 +63,14 @@ async function trySwitch(domain: string, url: string) {
 
     /* ========== 有码 ========== */
     // CA 集团
-    case 'madonna-av.com':
-    case 's1s1s1.com':
-    case 'moodyz.com':
+    case 'attackers.net':
     case 'honnaka.jp':
     case 'ideapocket.com':
-    case 'attackers.net':
-    case 'premium-beauty.com':
+    case 'madonna-av.com':
+    case 'moodyz.com':
     case 'mvg.jp':
+    case 'premium-beauty.com':
+    case 's1s1s1.com':
       av = await CA()
       break
     case 'www.mousouzoku-av.com':
