@@ -11,7 +11,7 @@ import Brazzers from './makers/brazzers'
 import Caribbean from './makers/caribbean'
 import SOD from './makers/sod'
 import MGS from './makers/mgstage'
-import Mousouzuku from './makers/mousouzoku'
+import Mousouzoku from './makers/mousouzoku'
 
 window.onload = async () => {
   await main()
@@ -74,7 +74,7 @@ async function trySwitch(domain: string, url: string) {
       av = await CA()
       break
     case 'www.mousouzoku-av.com':
-      av = await Mousouzuku(url)
+      av = await Mousouzoku()
       break
 
     // SOD 集团
