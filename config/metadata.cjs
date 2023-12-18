@@ -17,6 +17,7 @@ module.exports = {
     'https://*.ideapocket.com/works/detail/*',
     'https://*.madonna-av.com/works/detail/*',
     'https://*.mousouzoku-av.com/works/detail/*',
+    'https://*.prestige-av.com/goods/*',
 
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
@@ -32,7 +33,6 @@ module.exports = {
     'https://premium-beauty.com/*',
     'https://mvg.jp/*',
     // 欧美
-    'https://www.prestige-av.com/*',
     'https://*.tokyo-hot.com/*',
     'https://ec.sod.co.jp/*',
   ],

@@ -84,7 +84,7 @@ async function trySwitch(domain: string, url: string) {
 
     // Prestige 集团
     case 'www.prestige-av.com':
-      av = await Prestige(url)
+      av = await Prestige()
       break
 
     /* ========== 欧美 ========== */
