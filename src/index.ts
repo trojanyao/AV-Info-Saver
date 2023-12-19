@@ -79,7 +79,7 @@ async function trySwitch(domain: string, url: string) {
 
     // SOD 集团
     case 'ec.sod.co.jp':
-      av = await SOD(url)
+      av = await SOD()
       break
 
     // Prestige 集团

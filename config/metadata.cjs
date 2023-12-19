@@ -18,6 +18,7 @@ module.exports = {
     'https://*.madonna-av.com/works/detail/*',
     'https://*.mousouzoku-av.com/works/detail/*',
     'https://*.prestige-av.com/goods/*',
+    'https://*.sod.co.jp/prime/videos/*',
 
     /* ========== 欧美 ========== */
     'https://*.brazzers.com/video/*',
@@ -34,7 +35,6 @@ module.exports = {
     'https://mvg.jp/*',
     // 欧美
     'https://*.tokyo-hot.com/*',
-    'https://ec.sod.co.jp/*',
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
