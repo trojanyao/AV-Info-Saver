@@ -58,7 +58,7 @@ async function trySwitch(domain: string, url: string) {
       av = await Caribbean()
       break
     case 'my.tokyo-hot.com':
-      av = await TokyoHot(url)
+      av = await TokyoHot()
       break
 
     /* ========== 有码 ========== */

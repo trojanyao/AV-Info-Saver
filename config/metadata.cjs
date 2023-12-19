@@ -11,6 +11,7 @@ module.exports = {
     /* ========== 无码 ========== */
     'https://*.1pondo.tv/movies/*',
     'https://*.caribbeancom.com/moviepages/*',
+    'https://*.tokyo-hot.com/product/*',
 
     /* ========== 有码 ========== */
     'https://*.attackers.net/works/detail/*',
@@ -34,7 +35,6 @@ module.exports = {
     'https://premium-beauty.com/*',
     'https://mvg.jp/*',
     // 欧美
-    'https://*.tokyo-hot.com/*',
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
