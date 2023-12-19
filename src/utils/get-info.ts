@@ -19,7 +19,12 @@ const DEFAULT_KEY_LIST = {
  * @param {string} selector 列表项下信息值对应的 CSS 选择器
  * @param {InfoKeyList} keyList 查询的信息键列表
  */
-export function getInfo(infoList: Array<any>, selector: string, keyList: InfoKeyList = DEFAULT_KEY_LIST) {
+export function getInfo(
+  infoList: Array<any>,
+  selector: string,
+  keyList: InfoKeyList = DEFAULT_KEY_LIST,
+  actressSelector = ''
+) {
   keyList = { ...DEFAULT_KEY_LIST, ...keyList }
 
   function getValue(key: string) {
@@ -28,7 +33,9 @@ export function getInfo(infoList: Array<any>, selector: string, keyList: InfoKey
     }
 
     const infoItem = infoList?.find((info) => (info as HTMLElement)?.innerText?.includes(key))
-    return Array.from(infoItem?.querySelectorAll(selector), (item) => (item as HTMLElement)?.innerText || '')
+
+    let tempSelector = key === keyList.actressKey ? actressSelector || selector : selector
+    return Array.from(infoItem?.querySelectorAll(tempSelector), (item) => (item as HTMLElement)?.innerText || '')
   }
 
   return {
