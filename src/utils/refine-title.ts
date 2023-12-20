@@ -12,6 +12,9 @@ export function refineTitle(av: AVWork) {
   let endAct = new RegExp(av.actress + '$', 'g')
   let titleHasActress = startAct.test(av.workName) || endAct.test(av.workName)
 
+  // 替换斜线
+  av.workName = av.workName.replaceAll('/', ' ')
+
   if (titleHasActress) {
     av.workName = av.workName.replace(av.actress as string, '')
   }
