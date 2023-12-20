@@ -1,7 +1,7 @@
 const { author, dependencies, repository, version } = require('../package.json')
 
 module.exports = {
-  name: 'AV-Info-Quick-Saver',
+  name: 'AV Info Saver',
   namespace: '',
   version: version,
   author: author,
