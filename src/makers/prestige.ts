@@ -63,7 +63,7 @@ export default async function Prestige() {
 }
 
 // 编号在前的系列
-const DIGIT_FIRST_SERIES: string[] = ['人妻さんいらっしゃい！']
+const DIGIT_FIRST_SERIES: string[] = ['人妻さんいらっしゃい！', '職女。']
 
 // 无需加尾空格的系列
-const NO_End_SPACE_SERIES: string[] = ['人妻さんいらっしゃい！']
+const NO_End_SPACE_SERIES: string[] = ['人妻さんいらっしゃい！', '職女。']
