@@ -21,9 +21,8 @@ async function main() {
   const a = createBtn() // 创建按钮
 
   const domain = window.location.host
-  const url = document.URL
 
-  const av: any = await trySwitch(domain, url)
+  const av: any = await trySwitch(domain)
 
   if (av) {
     a.download = av.finalName
@@ -46,7 +45,7 @@ async function main() {
  * @param av AV对象
  * @param a 生成的按钮
  */
-async function trySwitch(domain: string, url: string) {
+async function trySwitch(domain: string) {
   let av: any = {}
 
   switch (domain) {
@@ -77,14 +76,14 @@ async function trySwitch(domain: string, url: string) {
       av = await Mousouzoku()
       break
 
-    // SOD 集团
-    case 'ec.sod.co.jp':
-      av = await SOD()
-      break
-
     // Prestige 集团
     case 'www.prestige-av.com':
       av = await Prestige()
+      break
+
+    // SOD 集团
+    case 'ec.sod.co.jp':
+      av = await SOD()
       break
 
     /* ========== 欧美 ========== */
