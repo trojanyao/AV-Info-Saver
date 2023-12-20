@@ -4,7 +4,7 @@
  * @param {string} code 传入的未处理的番号
  * @returns {string} 标准化处理后的番号
  */
-export function codify(code: string) {
+export function codify(code: string): string {
   /**
    * 无需处理
    * - 東京熱番号
