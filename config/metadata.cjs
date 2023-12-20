@@ -1,12 +1,12 @@
 const { author, dependencies, repository, version } = require('../package.json')
 
 module.exports = {
-  name: 'AV Info Saver',
+  name: 'AV Info Saver - AV 作品信息一键保存工具',
   namespace: '',
   version: version,
   author: author,
   source: repository.url,
-  // 'license': 'MIT',
+  license: 'MIT',
   match: [
     /* ========== 无码 ========== */
     'https://*.1pondo.tv/movies/*',
