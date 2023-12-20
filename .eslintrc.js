@@ -16,6 +16,7 @@ module.exports = {
   globals: {
     require: 'readonly',
     module: 'readonly',
+    __dirname: 'readonly',
   },
   rules: {
     'no-empty': 'off',
