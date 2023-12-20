@@ -54,7 +54,7 @@ import { checkIndicator } from '@/utils/check-indicator'
 import { checkDigit } from '@/utils/check-digit'
 
 // 序号优先的系列
-const DIGIT_FIRST_SERIES: string[] = []
+const DIGIT_FIRST_SERIES: string[] = ['新入社員のお仕事']
 
 /**
  * 拼接最终文件名
