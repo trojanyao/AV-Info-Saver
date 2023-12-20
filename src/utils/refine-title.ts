@@ -16,7 +16,7 @@ export function refineTitle(av: AVWork) {
   av.workName = av.workName.replaceAll('/', ' ')
 
   if (titleHasActress) {
-    av.workName = av.workName.replace(av.actress as string, '')
+    av.workName = av.workName.replace(av.actress?.join(' '), '')
   }
   // 头尾去空格
   av.workName = av.workName.trim()
