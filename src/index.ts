@@ -41,9 +41,6 @@ async function main() {
 /**
  * 根据不同厂商，使用不同的处理脚本，设置不同的按钮内容
  * @param domain 网站域名
- * @param url 作品页URL地址
- * @param av AV对象
- * @param a 生成的按钮
  */
 async function trySwitch(domain: string) {
   let av: any = {}
