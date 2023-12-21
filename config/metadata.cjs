@@ -14,10 +14,17 @@ module.exports = {
     'https://*.tokyo-hot.com/product/*',
 
     /* ========== 有码 ========== */
+    // CA 集团厂商
     'https://*.attackers.net/works/detail/*',
     'https://*.ideapocket.com/works/detail/*',
     'https://*.madonna-av.com/works/detail/*',
     'https://*.mousouzoku-av.com/works/detail/*',
+    'https://s1s1s1.com/*',
+    'https://moodyz.com/*',
+    'https://honnaka.jp/*',
+    'https://premium-beauty.com/*',
+    'https://mvg.jp/*',
+    // 其他
     'https://*.prestige-av.com/goods/*',
     'https://*.sod.co.jp/prime/videos/*',
 
@@ -27,14 +34,6 @@ module.exports = {
 
     /* ========== 素人 ========== */
     'https://*.mgstage.com/product/product_detail/*',
-
-    // CA 集团厂商
-    'https://s1s1s1.com/*',
-    'https://moodyz.com/*',
-    'https://honnaka.jp/*',
-    'https://premium-beauty.com/*',
-    'https://mvg.jp/*',
-    // 欧美
   ],
   require: [
     `https://cdn.jsdelivr.net/npm/jquery@${dependencies.jquery}/dist/jquery.min.js`,
