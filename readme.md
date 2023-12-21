@@ -1,14 +1,14 @@
 <p align="center">
   <a href="https://github.com/trojanyao/AV-Info-Saver">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/trojanyao/AV-Info-Saver/blob/master/readme/assets/icon.png">
-      <img src="https://github.com/trojanyao/AV-Info-Saver/blob/master/readme/assets/icon.png" height="128">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/trojanyao/AV-Info-Saver/master/readme/assets/icon.png">
+      <img src="https://raw.githubusercontent.com/trojanyao/AV-Info-Saver/master/readme/assets/icon.png" height="128">
     </picture>
     <h1 align="center">AV 作品信息一键保存工具</h1>
   </a>
 </p>
 
-![hero](https://github.com/trojanyao/AV-Info-Saver/blob/master/readme/assets/hero.png)
+![hero](https://raw.githubusercontent.com/trojanyao/AV-Info-Saver/master/readme/assets/hero.png)
 
 <p align="center">
   <a href="https://www.buymeacoffee.com/trojanyao" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
@@ -18,9 +18,9 @@
 
 多年以来，自己保存 AV 作品时习惯将厂商、系列、发布日期、演员、番号这些信息直接作为文件名记录在作品封面图文件中，另外再将对应的种子、影片、字幕重命名为同名文件。这样一来，就形成了统一规范；通过按文件名排序，管理起来清晰、方便、一目了然。
 
-![单品](https://github.com/trojanyao/AV-Info-Saver/blob/master/readme/assets/finder-single.png)
+![单品](https://raw.githubusercontent.com/trojanyao/AV-Info-Saver/master/readme/assets/finder-single.png)
 
-![系列作品](https://github.com/trojanyao/AV-Info-Saver/blob/master/readme/assets/finder-series.png)
+![系列作品](https://raw.githubusercontent.com/trojanyao/AV-Info-Saver/master/readme/assets/finder-series.png)
 
 之前，每次保存时都要手动将每条信息复制粘贴到文件名中——虽然 AV 作品可以带给人愉悦，但不应把生命浪费在这个机械化重复劳动的过程上。因此编写了这个油猴脚本，实现从 AV 厂商官网一键下载作品封面图，并将作品信息按固定格式保存在文件名中。
 
