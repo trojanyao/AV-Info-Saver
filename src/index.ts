@@ -2,16 +2,16 @@ import { createBtn } from './create-btn'
 import { sleep } from './utils'
 
 /* ===== Makers ===== */
-import CA from './makers/ca-group'
-import { NA } from './makers/naughty-america'
-import { OnePondo } from './makers/1pondo'
-import Prestige from './makers/prestige'
-import TokyoHot from './makers/tokyo-hot'
-import Brazzers from './makers/brazzers'
-import Caribbean from './makers/caribbean'
-import SOD from './makers/sod'
-import MGS from './makers/mgstage'
-import Mousouzoku from './makers/mousouzoku'
+import CA from '@/makers/02-censored/ca-group'
+import { NA } from '@/makers/03-western/naughty-america'
+import { OnePondo } from '@/makers/01-uncensored/1pondo'
+import Prestige from '@/makers/02-censored/prestige'
+import TokyoHot from '@/makers/01-uncensored/tokyo-hot'
+import Brazzers from '@/makers/03-western/brazzers'
+import Caribbean from '@/makers/01-uncensored/caribbean'
+import SOD from '@/makers/02-censored/sod'
+import MGS from '@/makers/04-amateur/mgstage'
+import Mousouzoku from '@/makers/02-censored/mousouzoku'
 
 window.onload = async () => {
   await main()

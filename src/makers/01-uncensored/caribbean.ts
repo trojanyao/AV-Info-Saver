@@ -1,4 +1,4 @@
-import { type AVWork } from '../typings'
+import { type AVWork } from '../../typings'
 
 export default async function Caribbean() {
   // 封面地址

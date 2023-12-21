@@ -1,4 +1,4 @@
-import { type AVWork } from '../typings'
+import { type AVWork } from '../../typings'
 
 export async function OnePondo() {
   // 作品名
