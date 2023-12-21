@@ -12,16 +12,16 @@
 // @match       https://*.ideapocket.com/works/detail/*
 // @match       https://*.madonna-av.com/works/detail/*
 // @match       https://*.mousouzoku-av.com/works/detail/*
-// @match       https://*.prestige-av.com/goods/*
-// @match       https://*.sod.co.jp/prime/videos/*
-// @match       https://*.brazzers.com/video/*
-// @match       https://*.naughtyamerica.com/scene/*
-// @match       https://*.mgstage.com/product/product_detail/*
 // @match       https://s1s1s1.com/*
 // @match       https://moodyz.com/*
 // @match       https://honnaka.jp/*
 // @match       https://premium-beauty.com/*
 // @match       https://mvg.jp/*
+// @match       https://*.prestige-av.com/goods/*
+// @match       https://*.sod.co.jp/prime/videos/*
+// @match       https://*.brazzers.com/video/*
+// @match       https://*.naughtyamerica.com/scene/*
+// @match       https://*.mgstage.com/product/product_detail/*
 // @require     https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js
 // @require     https://cdn.jsdelivr.net/npm/axios@0.26.0/dist/axios.min.js
 // @require     https://cdn.jsdelivr.net/npm/axios-userscript-adapter@0.1.11/dist/axiosGmxhrAdapter.min.js
@@ -423,7 +423,7 @@ function checkDigit(workName, seriesName) {
 
   return undefined;
 }
-;// CONCATENATED MODULE: ./src/makers/ca-group.ts
+;// CONCATENATED MODULE: ./src/makers/02-censored/ca-group.ts
 
 
 /**
@@ -569,7 +569,7 @@ function firstLetterUppercase(original) {
 
   return original === null || original === void 0 ? void 0 : (_original$split$map = original.split(/\s/).map(word => word.charAt(0) + word.slice(1).toLowerCase())) === null || _original$split$map === void 0 ? void 0 : _original$split$map.join(' ');
 }
-;// CONCATENATED MODULE: ./src/makers/naughty-america.ts
+;// CONCATENATED MODULE: ./src/makers/03-western/naughty-america.ts
 
 async function NA() {
   var _document$querySelect, _document$querySelect2, _sceneInfo$querySelec, _sceneInfo$querySelec2, _sceneInfo$querySelec3, _sceneInfo$querySelec4, _sceneInfo$querySelec5, _sceneInfo$querySelec6;
@@ -626,7 +626,7 @@ function naughty_america_final(av) {
   const finalName = `${av.seriesName}（${datify(av.date)}）${av.actress.join(', ')} - ${av.workName} [${av.duration}; ${(_av$resolutions = av.resolutions) === null || _av$resolutions === void 0 ? void 0 : _av$resolutions.join(', ')}]`;
   return `【${av.makerName}】${finalName}.jpg`;
 }
-;// CONCATENATED MODULE: ./src/makers/1pondo.ts
+;// CONCATENATED MODULE: ./src/makers/01-uncensored/1pondo.ts
 async function OnePondo() {
   var _getInfo, _getInfo$trim, _document$URL, _document$URL$match, _getInfo2;
 
@@ -844,7 +844,7 @@ function finalCensored(av) {
 
   return `【${av.makerName}】${finalName}.jpg`;
 }
-;// CONCATENATED MODULE: ./src/makers/prestige.ts
+;// CONCATENATED MODULE: ./src/makers/02-censored/prestige.ts
  // 厂商名转换列表
 
 const MAKER_TRANS = {
@@ -904,7 +904,7 @@ async function Prestige() {
 const prestige_DIGIT_FIRST_SERIES = ['人妻さんいらっしゃい！', '職女。']; // 无需加尾空格的系列
 
 const NO_End_SPACE_SERIES = ['人妻さんいらっしゃい！', '職女。'];
-;// CONCATENATED MODULE: ./src/makers/tokyo-hot.ts
+;// CONCATENATED MODULE: ./src/makers/01-uncensored/tokyo-hot.ts
 /**
  * 手动维护系列列表，从作品名中识别
  */
@@ -986,7 +986,7 @@ async function TokyoHot() {
     finalName: finalUncensored(av)
   };
 }
-;// CONCATENATED MODULE: ./src/makers/brazzers.ts
+;// CONCATENATED MODULE: ./src/makers/03-western/brazzers.ts
 async function Brazzers() {
   var _infoDiv$querySelecto, _infoDiv$querySelecto2, _infoDiv$querySelecto3, _infoDiv$querySelecto4, _infoDiv$querySelecto5, _imgUrl$match;
 
@@ -1028,7 +1028,7 @@ function brazzers_final(av) {
   const finalName = `${av.seriesName}（${datify(av.date)}）${av.actress.join(', ')} - ${av.workName}`;
   return `【${av.makerName}】${finalName}.jpg`;
 }
-;// CONCATENATED MODULE: ./src/makers/caribbean.ts
+;// CONCATENATED MODULE: ./src/makers/01-uncensored/caribbean.ts
 async function Caribbean() {
   var _document$querySelect, _document$querySelect2, _bgImg$match, _bgImg$match$, _document$querySelect3, _getInfo, _getInfo$trim, _document$URL, _document$URL$match, _getInfo2;
 
@@ -1130,7 +1130,7 @@ function caribbean_final(av) {
 
   return `【${av.makerName}】${finalName}.jpg`;
 }
-;// CONCATENATED MODULE: ./src/makers/sod.ts
+;// CONCATENATED MODULE: ./src/makers/02-censored/sod.ts
 
 
 async function SOD() {
@@ -1183,7 +1183,7 @@ function sod_final(av) {
   av.seriesName = refineSeries(av.seriesName);
   return finalCensored(av);
 }
-;// CONCATENATED MODULE: ./src/makers/mgstage.ts
+;// CONCATENATED MODULE: ./src/makers/04-amateur/mgstage.ts
 async function MGS() {
   var _document$querySelect, _document$querySelect2, _document$querySelect3, _getInfo;
 
@@ -1332,7 +1332,7 @@ function mgstage_final(av) {
 
   return `【${(mgstage_MAKER_TRANS === null || mgstage_MAKER_TRANS === void 0 ? void 0 : mgstage_MAKER_TRANS[av.makerName]) || av.makerName}】${finalName}.jpg`.replaceAll('/', '-');
 }
-;// CONCATENATED MODULE: ./src/makers/mousouzoku.ts
+;// CONCATENATED MODULE: ./src/makers/02-censored/mousouzoku.ts
 // 官网没有系列字段，从作品名中识别
 const series = ['OLスーツ倶楽部'];
 async function Mousouzoku() {
@@ -1483,9 +1483,6 @@ async function main() {
 /**
  * 根据不同厂商，使用不同的处理脚本，设置不同的按钮内容
  * @param domain 网站域名
- * @param url 作品页URL地址
- * @param av AV对象
- * @param a 生成的按钮
  */
 
 
