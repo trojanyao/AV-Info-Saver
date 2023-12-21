@@ -1,67 +1,121 @@
-# 安装
-
-[点击安装](https://github.com/trojanyao/AV-Info-Quick-Save/raw/master/dist/index.prod.user.js)
+<img src="./readme/assets/icon.png" alt="icon" />
 
 
 
-# This is a project help you build userscript with webpack
+<h1 style="text-align:center">AV 作品信息一键保存工具</h1>
 
-Just [use this git repo as a template](https://github.com/Trim21/webpack-userscript-template/generate).
+![hero](./readme/assets/hero.png)
 
-[中文说明](./readme.cn.md)
+<details>
+  <summary><b style="font-size: 1.4em">背景</b></summary>
 
-## dev
+多年以来，自己保存 AV 作品时习惯将厂商、系列、发布日期、演员、番号这些信息直接作为文件名记录在作品封面图文件中，另外再将对应的种子、影片、字幕重命名为同名文件。这样一来，就形成了统一规范；通过按文件名排序，管理起来清晰、方便、一目了然。
 
-1. Allow Tampermonkey's access to local file URIs [tampermonkey/faq](https://tampermonkey.net/faq.php?ext=dhdg#Q204)
-2. install deps with `npm i` or `npm ci`.
-3. `npm run dev` to start your development.
-4. open `webpack-userscript-template/dist/index.dev.user.js` in your Chrome and install it with your userscript manager.
+![Xnip2023-12-21_10-28-21](/Users/trojan/Documents/GitHub 项目/AV-Info-Saver/readme/assets/finder-single.png)
 
-this userscript's meta contains `// @require file://path/to/dist/index.debug.user.js`,
-which take [src/index.ts](./src/index.ts) as entry point.
+![Xnip2023-12-21_10-28-21](/Users/trojan/Documents/GitHub 项目/AV-Info-Saver/readme/assets/finder-series.png)
 
-every times you edit your metadata, you'll have to restart webpack watch server and install new UserScript in your browser again,
-because Tampermonkey don't read it from dist every times.
+之前，每次保存时都要手动将每条信息复制粘贴到文件名中——虽然 AV 作品可以带给人愉悦，但不应把生命浪费在这个机械化重复劳动的过程上。因此编写了这个油猴脚本，实现从 AV 厂商官网一键下载作品封面图，并将作品信息按固定格式保存在文件名中。
 
-5. edit [src/index.ts](./src/index.ts), you can even import css or less files. You can use scss if you like.
-6. go wo <https://www.example.com/> and open console, you'll see it's working.
+效率从原来手动保存的 20~30s 压缩到了 1~2s 。
 
-livereload is default enabled, use [this chrome extension](https://chrome.google.com/webstore/detail/jnihajbhpnppcggbcgedagnkighmdlei)
+<video controls>
+    <source src="./readme/assets/screen recording.mp4" type="video/mp4">
+</video>
 
-## TypeScript
 
-use typescript as normal, see [example](src/index.ts)
+</details>
 
-## dependencies
+<details><summary><b style="font-size: 1.4em">安装 & 使用</b></summary>
 
-There are two ways to using a package on npm.
+1. **安装油猴脚本浏览器插件**
 
-### UserScript way
+   此处不赘述，前往官网自行研究安装：https://www.tampermonkey.net/ 。
 
-like original UserScript way, you will need to add them to your [user script metadata's require section](./config/metadata.cjs#L13-L17) , and exclude them in [config/webpack.config.base.cjs](./config/webpack.config.base.cjs#L18-L20)
+2. **安装 AV Info Saver 脚本**
 
-### Webpack way
+   - Greasy Fork【🥇推荐，可以获得更新提醒】
 
-just install a package and import it in your js file. webpack will pack them with in your final production js file.
+     [AV Info Saver - AV 作品信息一键保存工具](https://greasyfork.org/zh-CN/scripts/482729-av-info-saver-av-%E4%BD%9C%E5%93%81%E4%BF%A1%E6%81%AF%E4%B8%80%E9%94%AE%E4%BF%9D%E5%AD%98%E5%B7%A5%E5%85%B7)
 
-## build
+     > 由于我主动将该脚本标记为了成人相关，可能需要登录账号才可查看。
 
-```bash
-npm run build
-```
+   - GitHub 原始脚本地址
 
-`dist/index.prod.user.js` is the finally script. you can manually copy it to greaskfork for deploy.
+     ```
+     https://github.com/trojanyao/AV-Info-Saver/raw/master/dist/index.prod.user.js
+     ```
 
-### minify
+3. **打开相应的 AV 厂商官网作品页，点击按钮，一键保存！**
 
-There is a [limit in greasyfork](https://greasyfork.org/en/help/code-rules), your code must not be obfuscated or minified.
+   > 注意：为了不影响各官网原有功能，该脚本 **仅在作品详情页生效**。如果安装后在首页没看到下载面板，别着急，随便点进去一个作品页，适配了的话会出现在右上角。
 
-## auto deploy
+</details>
 
-[github actions](./.github/workflows/deploy.yaml#L36) will deploy production userscript to gh-pages branch.
+<details><summary><b style="font-size: 1.4em">适配厂商 & 后续更新</b></summary>
 
-[example](https://github.com/Trim21/webpack-userscript-template/tree/gh-pages)
+v1.0.0 适配了 12 个常见的主流厂商，包括无码、有码、欧美、素人。详见 [v1.0.0 更新说明](https://github.com/trojanyao/AV-Info-Saver/releases/tag/v1.0.0)，之后适配的也都会在对应的更新说明中列出。
 
-[deployed](https://trim21.github.io/webpack-userscript-template/)
+由于 COVID-19 之后各厂商的作品质量出现断崖式下跌，小厂商更是存活艰难，有的甚至关站停更。我现在不怎么看新作品和小厂商的作品了，第一批适配的 12 个主流厂商基本能覆盖日常使用。因此短期内可能不会再适配新厂商；除非研究历史作品的过程中，出现某个使用特别频繁的厂商。
 
-You can auto use greasyfork's auto update function.
+当然，如果你特别喜欢某个厂商，可以 fork 本项目自己适配，也欢迎提交 PR 。
+
+</details>
+
+<details><summary><b style="font-size: 1.4em">开发 & 贡献</b></summary>
+本项目基于 [trim21/webpack-userscript-template](https://github.com/trim21/webpack-userscript-template) 模板，以实现用 Webpack 模块化开发油猴脚本。相关知识请参考 [说明](./readme/readme.cn.md) 。
+
+自行适配的请参考以下步骤：
+
+1. 在 [`config/metadata.cjs`](config/metadata.cjs) 中新增 URL 匹配规则，建议仅在作品详情页生效；
+
+   > 注意：每次修改该文件都要 `npm run dev` 重新生成，安装。
+
+2. 在 [`src/makers`](src/makers) 中对应的子目录下新增对应厂商的脚本；
+
+   > 具体业务逻辑可参考已适配的其他厂商。
+
+3. 在 [`index.ts`](src/index.ts) 中导入上一步创建的脚本，并在 `trySwitch()` 方法中根据域名匹配；
+
+4. 测试打包。
+
+   > 建议针对不同情况测试，已适配的厂商格式如下。
+   >
+   > - 单品
+   >
+   >   - 单人：`【厂商】（发布日期）演员（番号）作品名 [时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >
+   >   - 多人：`【厂商】（发布日期）演员1 演员2（番号）作品名 [时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >
+   > - 系列作品
+   >
+   >   - 无编号
+   >
+   >     - 单人：`【厂商】系列名（发布日期）演员（番号）[时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >     - 多人：`【厂商】系列名（发布日期）演员1 演员2（番号）[时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >
+   >   - 有编号
+   >
+   >     - 日期优先
+   >
+   >       - 单人：`【厂商】系列名（发布日期）编号（番号）演员 [时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >
+   >       - 多人：`【厂商】系列名（发布日期）编号（番号）演员1 演员2 [时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >
+   >     - 编号优先
+   >
+   >       - 单人：`【厂商】系列名 编号（发布日期）演员（番号）[时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >
+   >       - 多人：`【厂商】系列名 编号（发布日期）演员1 演员2（番号）[时长; 大小1-格式1-分辨率1, 大小2-格式2-分辨率2].jpg`
+   >
+   > 说明：
+   >
+   > 1. 时长：因为在下载作品时有的不完整，记录时长信息是为了便于确认作品完整性。由于欧美和素人作品的封面图往往是一张单纯的截图，因此也保存下时长信息。
+   > 2. 大小、格式、分辨率：有些厂商（如：東京熱）针对同一个作品会发行不同格式、不同清晰度的版本，记录下这些信息方便在下载时作参考，选择质量最高的版本。
+   > 3. 编号优先：有些厂商或系列在发行时并非严格按照日期顺序编号，如果按日期排序就可能出现某个作品编号在其他作品之后，但实际发行日期靠前的情况，看起来有些混乱。因此编号优先让我们完全以编号排序为准，保证正确的顺序。
+
+</details>
+
+
+
+<a href="https://www.buymeacoffee.com/trojanyao" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
