@@ -23,9 +23,9 @@ export function datify(date: string): string {
   }
 
   // 含有汉字的格式
-  let year = date.match(/(\d{4})年/)[1]
-  let month = date.match(/(\d{1,2})月/)[1]
-  let day = date.match(/(\d{1,2})日/)[1]
-  newDate = `${year}.${month.length === 1 ? '0' + month : month}.${day.length === 1 ? '0' + day : day}`
+  let year = date.match(/(\d{4})年/)?.[1]
+  let month = date.match(/(\d{1,2})月/)?.[1]
+  let day = date.match(/(\d{1,2})日/)?.[1]
+  newDate = `${year}.${month?.length === 1 ? '0' + month : month}.${day?.length === 1 ? '0' + day : day}`
   return newDate
 }
