@@ -34,9 +34,9 @@ export async function NA() {
   )
 
   // 时长
-  const duration = (sceneInfo.querySelector('.duration') as HTMLElement)?.innerText
-    ?.match(/\d+\smin/)?.[0]
-    .replace(' ', '')
+  const duration =
+    (sceneInfo.querySelector('.duration') as HTMLElement)?.innerText?.match(/\d+\smin/)?.[0].replace(' ', '') ??
+    '未知时长'
 
   const labels = sceneInfo.querySelectorAll('.flag-bg')
   const resolutions: string[] = Array.from(labels, (label) =>

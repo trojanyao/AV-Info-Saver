@@ -262,6 +262,8 @@ function getInfo(infoList, selector) {
  * @returns {string} 处理后的标准日期格式
  */
 function datify(date) {
+  var _date$match, _date$match2, _date$match3;
+
   let newDate; // 符合标准格式：直接返回
 
   if (/\d{4}\.\d{2}\.\d{2}/.test(date)) {
@@ -280,10 +282,10 @@ function datify(date) {
   } // 含有汉字的格式
 
 
-  let year = date.match(/(\d{4})年/)[1];
-  let month = date.match(/(\d{1,2})月/)[1];
-  let day = date.match(/(\d{1,2})日/)[1];
-  newDate = `${year}.${month.length === 1 ? '0' + month : month}.${day.length === 1 ? '0' + day : day}`;
+  let year = (_date$match = date.match(/(\d{4})年/)) === null || _date$match === void 0 ? void 0 : _date$match[1];
+  let month = (_date$match2 = date.match(/(\d{1,2})月/)) === null || _date$match2 === void 0 ? void 0 : _date$match2[1];
+  let day = (_date$match3 = date.match(/(\d{1,2})日/)) === null || _date$match3 === void 0 ? void 0 : _date$match3[1];
+  newDate = year && month && day ? `${year}.${(month === null || month === void 0 ? void 0 : month.length) === 1 ? '0' + month : month}.${(day === null || day === void 0 ? void 0 : day.length) === 1 ? '0' + day : day}` : '未知日期';
   return newDate;
 }
 ;// CONCATENATED MODULE: ./src/utils/codify.ts
@@ -596,7 +598,7 @@ async function NA() {
 
   const actress = Array.from(sceneInfo.querySelectorAll('.performer-list > a'), a => firstLetterUppercase(a === null || a === void 0 ? void 0 : a.innerText)); // 时长
 
-  const duration = (_sceneInfo$querySelec4 = sceneInfo.querySelector('.duration')) === null || _sceneInfo$querySelec4 === void 0 ? void 0 : (_sceneInfo$querySelec5 = _sceneInfo$querySelec4.innerText) === null || _sceneInfo$querySelec5 === void 0 ? void 0 : (_sceneInfo$querySelec6 = _sceneInfo$querySelec5.match(/\d+\smin/)) === null || _sceneInfo$querySelec6 === void 0 ? void 0 : _sceneInfo$querySelec6[0].replace(' ', '');
+  const duration = ((_sceneInfo$querySelec4 = sceneInfo.querySelector('.duration')) === null || _sceneInfo$querySelec4 === void 0 ? void 0 : (_sceneInfo$querySelec5 = _sceneInfo$querySelec4.innerText) === null || _sceneInfo$querySelec5 === void 0 ? void 0 : (_sceneInfo$querySelec6 = _sceneInfo$querySelec5.match(/\d+\smin/)) === null || _sceneInfo$querySelec6 === void 0 ? void 0 : _sceneInfo$querySelec6[0].replace(' ', '')) ?? '未知时长';
   const labels = sceneInfo.querySelectorAll('.flag-bg');
   const resolutions = Array.from(labels, label => (label === null || label === void 0 ? void 0 : label.innerText) === 'HD' ? '1080p' : label === null || label === void 0 ? void 0 : label.innerText);
   const av = {
