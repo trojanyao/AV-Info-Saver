@@ -1,7 +1,7 @@
 {
   "name": "av-info-saver",
   "description": "将厂商、系列、发布日期、演员名、番号等 AV 作品信息作为封面图片文件名，一键保存到本地的油猴脚本。",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "TROJAN",
     "email": "ytj1996@gmail.com"
