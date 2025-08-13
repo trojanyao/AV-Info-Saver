@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        AV Info Saver - AV 作品信息一键保存工具
 // @namespace
-// @version     1.0.0
+// @version     1.0.1
 // @author      TROJAN <ytj1996@gmail.com>
 // @source      https://github.com/trojanyao/AV-Info-Saver
 // @license     MIT
