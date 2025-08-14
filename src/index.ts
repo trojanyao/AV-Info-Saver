@@ -32,7 +32,7 @@ async function main() {
     console.log(a.download)
 
     // 自动保存开启
-    if (localStorage.getItem('autoSave') === 'yes') {
+    if (localStorage.getItem('av-info-saver-auto-save') === 'yes') {
       a.click()
     }
   }
