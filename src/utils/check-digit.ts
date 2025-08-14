@@ -9,13 +9,14 @@ export function checkDigit(workName: string, seriesName: string): string | undef
   const seriesNameNoSpace = seriesName.replaceAll(' ', '')
 
   /* 有纯数字编号也肯定是在标题中的系列名后跟着纯数字 */
-  const reg = new RegExp(`\\s*${seriesNameNoSpace}\\s*(\\d+)`, 'g')
+  // 兼容「系列名 纯数字」和「#纯数字」两种格式
+  const reg = new RegExp(`(?:\\s*${seriesNameNoSpace}\\s*(\\d+))|(?:#(\\d+))`, 'g')
   const matches = [...workName.replaceAll(' ', '').matchAll(reg)]
 
   for (const match of matches) {
     if (match.length >= 2) {
       // 说明匹配到了捕获组，将其返回（系列编号）
-      return match[1]
+      return match[1] || match[2]
     }
   }
 
