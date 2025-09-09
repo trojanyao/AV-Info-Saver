@@ -411,14 +411,15 @@ function checkIndicator(workName) {
 function checkDigit(workName, seriesName) {
   const seriesNameNoSpace = seriesName.replaceAll(' ', '');
   /* 有纯数字编号也肯定是在标题中的系列名后跟着纯数字 */
+  // 兼容「系列名 纯数字」和「#纯数字」两种格式
 
-  const reg = new RegExp(`\\s*${seriesNameNoSpace}\\s*(\\d+)`, 'g');
+  const reg = new RegExp(`(?:\\s*${seriesNameNoSpace}\\s*(\\d+))|(?:#(\\d+))`, 'g');
   const matches = [...workName.replaceAll(' ', '').matchAll(reg)];
 
   for (const match of matches) {
     if (match.length >= 2) {
       // 说明匹配到了捕获组，将其返回（系列编号）
-      return match[1];
+      return match[1] || match[2];
     }
   } // 不包含纯数字
 
@@ -990,16 +991,16 @@ async function TokyoHot() {
 }
 ;// CONCATENATED MODULE: ./src/makers/03-western/brazzers.ts
 async function Brazzers() {
-  var _infoDiv$querySelecto, _infoDiv$querySelecto2, _infoDiv$querySelecto3, _infoDiv$querySelecto4, _infoDiv$querySelecto5, _imgUrl$match;
+  var _infoDiv$querySelecto, _infoDiv$querySelecto2, _infoDiv$querySelecto3, _infoDiv$querySelecto4, _infoDiv$querySelecto5, _infoDiv$querySelecto6, _imgUrl$match;
 
   // 信息容器
   const infoDiv = document.querySelector('#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div > div > div > section > div > div'); // 作品名
 
   const workName = infoDiv === null || infoDiv === void 0 ? void 0 : (_infoDiv$querySelecto = infoDiv.querySelector('h2.font-secondary')) === null || _infoDiv$querySelecto === void 0 ? void 0 : _infoDiv$querySelecto.innerText; // 日期
 
-  const date = new Date(infoDiv === null || infoDiv === void 0 ? void 0 : (_infoDiv$querySelecto2 = infoDiv.querySelector('div:nth-child(2)')) === null || _infoDiv$querySelecto2 === void 0 ? void 0 : _infoDiv$querySelecto2.innerText).toLocaleDateString('zh-CN'); // 演员列表
+  const date = new Date(infoDiv === null || infoDiv === void 0 ? void 0 : (_infoDiv$querySelecto2 = infoDiv.querySelectorAll('div')) === null || _infoDiv$querySelecto2 === void 0 ? void 0 : (_infoDiv$querySelecto3 = _infoDiv$querySelecto2[0]) === null || _infoDiv$querySelecto3 === void 0 ? void 0 : _infoDiv$querySelecto3.innerText).toLocaleDateString('zh-CN'); // 演员列表
 
-  const actress = (infoDiv === null || infoDiv === void 0 ? void 0 : (_infoDiv$querySelecto3 = infoDiv.querySelectorAll('div')) === null || _infoDiv$querySelecto3 === void 0 ? void 0 : (_infoDiv$querySelecto4 = _infoDiv$querySelecto3[3]) === null || _infoDiv$querySelecto4 === void 0 ? void 0 : (_infoDiv$querySelecto5 = _infoDiv$querySelecto4.innerText) === null || _infoDiv$querySelecto5 === void 0 ? void 0 : _infoDiv$querySelecto5.split(', ')) || []; // 封面地址
+  const actress = (infoDiv === null || infoDiv === void 0 ? void 0 : (_infoDiv$querySelecto4 = infoDiv.querySelectorAll('div')) === null || _infoDiv$querySelecto4 === void 0 ? void 0 : (_infoDiv$querySelecto5 = _infoDiv$querySelecto4[1]) === null || _infoDiv$querySelecto5 === void 0 ? void 0 : (_infoDiv$querySelecto6 = _infoDiv$querySelecto5.innerText) === null || _infoDiv$querySelecto6 === void 0 ? void 0 : _infoDiv$querySelecto6.split(', ')) || []; // 封面地址
 
   let imgUrl = document.querySelector('video + div').style['background-image'];
   imgUrl = (_imgUrl$match = imgUrl.match(/"(\S+)"/)) === null || _imgUrl$match === void 0 ? void 0 : _imgUrl$match[1]; // 跨域获取
@@ -1477,7 +1478,7 @@ async function main() {
 
     console.log(a.download); // 自动保存开启
 
-    if (localStorage.getItem('autoSave') === 'yes') {
+    if (localStorage.getItem('av-info-saver-auto-save') === 'yes') {
       a.click();
     }
   }

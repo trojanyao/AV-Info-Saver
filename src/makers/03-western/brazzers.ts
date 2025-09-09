@@ -10,10 +10,12 @@ export default async function Brazzers() {
   const workName: string = (infoDiv?.querySelector('h2.font-secondary') as HTMLElement)?.innerText
 
   // 日期
-  const date: string = new Date((infoDiv?.querySelector('div:nth-child(2)') as HTMLElement)?.innerText).toLocaleDateString('zh-CN')
+  const date: string = new Date((infoDiv?.querySelectorAll('div')?.[0] as HTMLElement)?.innerText).toLocaleDateString(
+    'zh-CN'
+  )
 
   // 演员列表
-  const actress: string[] = infoDiv?.querySelectorAll('div')?.[3]?.innerText?.split(', ') || []
+  const actress: string[] = (infoDiv?.querySelectorAll('div')?.[1] as HTMLElement)?.innerText?.split(', ') || []
 
   // 封面地址
   let imgUrl = ((document.querySelector('video + div') as HTMLElement).style as any)['background-image']
